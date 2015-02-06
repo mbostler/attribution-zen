@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: attribution_portfolios
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe Attribution::Portfolio, :type => :model do

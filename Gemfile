@@ -49,6 +49,7 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'guard-cucumber'
   gem 'rb-fsevent' if `uname` =~ /Darwin/
+  gem 'annotate'
 end
 
 group :test do
