@@ -1,5 +1,5 @@
 Given(/^a performance day for a portfolio$/) do
-  @day = Attribution::Day.new  
+  @day = Attribution::Day.new
 end
 
 When(/^I create the data file for that performance day$/) do
@@ -12,5 +12,5 @@ Then(/^the data file should have a header line$/) do
 end
 
 Then(/^the data file should have one data line per security$/) do
-  expect(@text.split.size).to eq(@day.securities.size+1)
+  expect(@text.split.size).to eq(@day.security_days.size+1)
 end

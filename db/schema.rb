@@ -11,17 +11,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130021003) do
+ActiveRecord::Schema.define(version: 20150216211153) do
 
   create_table "attribution_days", force: :cascade do |t|
     t.date     "date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "portfolio_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "attribution_portfolio_days", force: :cascade do |t|
+    t.integer  "day_id"
+    t.float    "performance"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "attribution_portfolios", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "attribution_securities", force: :cascade do |t|
+    t.string   "cusip"
+    t.string   "ticker"
+    t.date     "effective_on"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "attribution_security_days", force: :cascade do |t|
+    t.string   "cusip"
+    t.float    "weight"
+    t.float    "performance"
+    t.float    "contribution"
+    t.integer  "security_id"
+    t.integer  "day_id"
+    t.integer  "portfolio_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
 end

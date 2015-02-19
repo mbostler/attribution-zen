@@ -12,15 +12,8 @@ Feature: Calculation
 	|   1.05  |   1.08  |  1.15  |  1.3041 |
 	|  0.94  |   1.08  |  0.95  | 0.96444 |
 	
-  Scenario Outline: Calculating cumulative security-level returns
-    Given a portfolio whose first security returned <r1_1>, <r1_2>, and <r1_3>
-    And whose second security returned <r2_1>, <r2_2>, and <r2_3>
-    And whose first security's weights were <w1_1>, <w1_2>, and <w1_3>
-    And whose second security's weights were <w2_1>, <w2_2>, and <w2_3>
+  Scenario: Calculating cumulative security-level returns
+  	Given a portfolio defined by the calculation data file
 	When I ask the program to calculate performance
-	Then I should see security-level returns of <r1_t> and <r2_t>
-	And I should see security-level contributions of <c1_t> and <c2_t>
-	And I should see a listing of portfolio return <result>
-	
-	Examples:
-	|r1_1|r1_2|r1_3|r2_1|r2_2|r3_3|w1_1|w1_2|w1_3|w2_1|w2_2|w2_3|r1_t|r2_t|c1_t|c2_t|result|
+	Then I should see cumulative security-level performance that matches the data file
+	And I should see cumulative security-level contribution that matches the data file
