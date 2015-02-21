@@ -9,13 +9,23 @@ class Attribution::Report
   
   def calculate
     self.securities = Hash.new { |h, k| h[k] = [] }
-    days = @portfolio.days
+    ensure_days_are_completely_downloaded
     days.sort_by(&:date).each do |d|
       d.security_days.each do |sd|
         securities[sd.cusip] << sd
       end
     end
     @results = { :security => security_stats }
+  end
+  
+  def days
+    @portfolio.days
+  end
+  
+  def ensure_days_are_completely_downloaded
+    days.each do |day|
+      day.download unless day.completed?
+    end
   end
   
   def security_stats

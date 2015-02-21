@@ -2,15 +2,20 @@
 #
 # Table name: attribution_portfolios
 #
-#  id         :integer          not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :integer          not null, primary key
+#  name           :string           not null
+#  human_name     :string
+#  account_number :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 
 class Attribution::Portfolio < ActiveRecord::Base
   attr_accessor :returns
   attr_reader :total_performance
   has_many :days, :class_name => "Attribution::Day"
+  has_many :holdings, :through => :days
+  has_many :transactions, :through => :days
 
   after_initialize :set_portfolio_returns
   
@@ -22,4 +27,15 @@ class Attribution::Portfolio < ActiveRecord::Base
     @total_performance = @returns.total
   end
   
+  def day( date )
+    days.where( :date => date ).first_or_create!
+  end
+  
+  def holdings_on( date )
+    day( date ).holdings
+  end
+  
+  def transactions_on( date )
+    day( date ).holdings
+  end
 end

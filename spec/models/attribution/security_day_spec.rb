@@ -7,7 +7,7 @@
 #  weight       :float
 #  performance  :float
 #  contribution :float
-#  security_id  :integer
+#  company_id   :integer
 #  day_id       :integer
 #  portfolio_id :integer
 #  created_at   :datetime         not null
@@ -23,9 +23,9 @@ RSpec.describe Attribution::SecurityDay, :type => :model do
     cusip = "ABC0001"
     sd = Attribution::SecurityDay.new :day_id => d0.id, 
                                       :cusip => cusip
-    expect( sd.security.nil? ).to eq(true)
+    expect( sd.company.nil? ).to eq(true)
     sd.save!
-    expect( sd.security.nil? ).to eq(false)    
+    expect( sd.company.nil? ).to eq(false)    
   end
   
   it 'has a date' do
@@ -35,4 +35,5 @@ RSpec.describe Attribution::SecurityDay, :type => :model do
     sd = ::Attribution::SecurityDay.new :day => d
     expect( sd.date ).to eq( date )
   end
+  
 end

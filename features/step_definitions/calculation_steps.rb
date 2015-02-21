@@ -37,7 +37,7 @@ Given(/^a portfolio defined by the calculation data file$/) do
   d2 = d1 + 1
   d3 = d1 + 2
   
-  @portfolio = Attribution::Portfolio.create!
+  @portfolio = Attribution::Portfolio.create! name: "Bodhi"
 
   d1 = @portfolio.days.where( :date => d1 ).first_or_create
   d1.security_days.create!( { :cusip        => "A",

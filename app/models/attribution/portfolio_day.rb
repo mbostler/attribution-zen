@@ -10,4 +10,5 @@
 #
 
 class Attribution::PortfolioDay < ActiveRecord::Base
+  
 end

@@ -11,11 +11,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150216211153) do
+ActiveRecord::Schema.define(version: 20150221194710) do
+
+  create_table "attribution_companies", force: :cascade do |t|
+    t.string   "name"
+    t.string   "cusip"
+    t.string   "ticker"
+    t.date     "effective_on"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "attribution_days", force: :cascade do |t|
     t.date     "date"
     t.integer  "portfolio_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "attribution_holding_types", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "attribution_holdings", force: :cascade do |t|
+    t.float    "quantity"
+    t.string   "ticker"
+    t.string   "cusip"
+    t.string   "security"
+    t.float    "unit_cost"
+    t.float    "total_cost"
+    t.float    "price"
+    t.float    "market_value"
+    t.float    "pct_assets"
+    t.float    "yield"
+    t.integer  "company_id"
+    t.string   "code"
+    t.integer  "type_id"
+    t.integer  "day_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
@@ -28,8 +62,11 @@ ActiveRecord::Schema.define(version: 20150216211153) do
   end
 
   create_table "attribution_portfolios", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",           null: false
+    t.string   "human_name"
+    t.string   "account_number"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "attribution_securities", force: :cascade do |t|
@@ -45,9 +82,30 @@ ActiveRecord::Schema.define(version: 20150216211153) do
     t.float    "weight"
     t.float    "performance"
     t.float    "contribution"
-    t.integer  "security_id"
+    t.integer  "company_id"
     t.integer  "day_id"
     t.integer  "portfolio_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "attribution_transaction_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "attribution_transactions", force: :cascade do |t|
+    t.string   "code"
+    t.string   "security"
+    t.date     "trade_date"
+    t.date     "settle_date"
+    t.string   "sd_type"
+    t.string   "sd_symbol"
+    t.float    "trade_amount"
+    t.string   "cusip"
+    t.string   "symbol"
+    t.integer  "day_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end

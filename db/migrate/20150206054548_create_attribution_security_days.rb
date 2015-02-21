@@ -5,7 +5,7 @@ class CreateAttributionSecurityDays < ActiveRecord::Migration
       t.float :weight
       t.float :performance
       t.float :contribution
-      t.integer :security_id
+      t.integer :company_id
       t.integer :day_id
       t.integer :portfolio_id
 

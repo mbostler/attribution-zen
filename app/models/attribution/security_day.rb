@@ -7,7 +7,7 @@
 #  weight       :float
 #  performance  :float
 #  contribution :float
-#  security_id  :integer
+#  company_id   :integer
 #  day_id       :integer
 #  portfolio_id :integer
 #  created_at   :datetime         not null
@@ -15,23 +15,26 @@
 #
 
 class Attribution::SecurityDay < ActiveRecord::Base
-  belongs_to :security, :class_name => "Attribution::Security"
+  belongs_to :company, class_name: "Attribution::Company"
   belongs_to :day, :class_name => "Attribution::Day"
   before_save :link_security_data
   
   def link_security_data
-    if !!self.security && self.security.cusip == self.cusip
+    if !!self.company && self.company.cusip == self.cusip
       return
     else
-      sec = Attribution::Security.
+      c = Attribution::Company.
               where( :cusip => cusip ).
-              order( "effective_on DESC" ).
               first_or_create
-      self.security = sec
+      self.company = c
     end
   end
   
   def date
     self.day and self.day.date
+  end
+  
+  def ticker
+    self.company.ticker
   end
 end

@@ -92,5 +92,16 @@ RSpec.describe Attribution::Report, :type => :model do
       expect( report.pv_multiplier( a1 ) ).to eq( 1.0353 )
     end
     
+    it 'should check to see if it needs to download transactions before calculating' do
+      date = Date.civil(2015, 2, 19)
+      portfolio_name = "bodhi"
+      portfolio = Attribution::Portfolio.where( name: portfolio_name ).first_or_create
+      report = Attribution::Report.new portfolio: portfolio,
+                                      start_date: date,
+                                        end_date: date
+      expect( report ).to receive(:ensure_days_are_completely_downloaded)
+      report.calculate
+    end
+    
   end
 end
