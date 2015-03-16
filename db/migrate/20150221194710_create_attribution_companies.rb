@@ -4,6 +4,7 @@ class CreateAttributionCompanies < ActiveRecord::Migration
       t.string :name
       t.string :cusip
       t.string :ticker
+      t.integer :code_id
       t.date :effective_on
 
       t.timestamps null: false

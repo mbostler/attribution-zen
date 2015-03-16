@@ -5,6 +5,7 @@
 #  id           :integer          not null, primary key
 #  code         :string
 #  security     :string
+#  quantity     :integer
 #  trade_date   :date
 #  settle_date  :date
 #  sd_type      :string
@@ -13,6 +14,8 @@
 #  cusip        :string
 #  symbol       :string
 #  day_id       :integer
+#  close_method :string
+#  lot          :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

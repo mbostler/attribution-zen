@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221194710) do
+ActiveRecord::Schema.define(version: 20150301193524) do
 
   create_table "attribution_companies", force: :cascade do |t|
     t.string   "name"
     t.string   "cusip"
     t.string   "ticker"
+    t.integer  "code_id"
     t.date     "effective_on"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
@@ -27,6 +28,12 @@ ActiveRecord::Schema.define(version: 20150221194710) do
     t.integer  "portfolio_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "attribution_holding_codes", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "attribution_holding_types", force: :cascade do |t|
@@ -47,7 +54,7 @@ ActiveRecord::Schema.define(version: 20150221194710) do
     t.float    "pct_assets"
     t.float    "yield"
     t.integer  "company_id"
-    t.string   "code"
+    t.integer  "code_id"
     t.integer  "type_id"
     t.integer  "day_id"
     t.datetime "created_at",   null: false
@@ -85,6 +92,7 @@ ActiveRecord::Schema.define(version: 20150221194710) do
     t.integer  "company_id"
     t.integer  "day_id"
     t.integer  "portfolio_id"
+    t.integer  "code_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
@@ -98,6 +106,7 @@ ActiveRecord::Schema.define(version: 20150221194710) do
   create_table "attribution_transactions", force: :cascade do |t|
     t.string   "code"
     t.string   "security"
+    t.integer  "quantity"
     t.date     "trade_date"
     t.date     "settle_date"
     t.string   "sd_type"
@@ -106,6 +115,8 @@ ActiveRecord::Schema.define(version: 20150221194710) do
     t.string   "cusip"
     t.string   "symbol"
     t.integer  "day_id"
+    t.string   "close_method"
+    t.string   "lot"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end

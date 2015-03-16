@@ -14,7 +14,7 @@
 #  pct_assets   :float
 #  yield        :float
 #  company_id   :integer
-#  code         :string
+#  code_id      :integer
 #  type_id      :integer
 #  day_id       :integer
 #  created_at   :datetime         not null
@@ -43,5 +43,24 @@ RSpec.describe Attribution::Holding, :type => :model do
     allow_any_instance_of( Attribution::Day ).to receive(:ensure_download).and_return( true )
     allow_any_instance_of( Attribution::Day ).to receive(:total_market_value).and_return( 50 )
     expect( h.portfolio_weight ).to eq( 0.1 )
+  end
+  
+  it 'knows whether or not it is usable' do
+    excluded_types = %w(acctfeepay adminfeepay custfeepay manfeepay ticketfeepay)
+    excluded_types.each do |ex_type|
+      code = Attribution::HoldingCode.new :name => ex_type
+      h = Attribution::Holding.new :code => code
+      expect( h.usable? ).to eq(false)
+    end
+
+    included_types = %w(divacc intacc cash redpay legalfeepay)
+    included_types.each do |in_type|
+      code = Attribution::HoldingCode.new :name => in_type
+      h = Attribution::Holding.new :code => code
+      expect( h.usable? ).to eq(true)
+    end
+    
+    h = Attribution::Holding.new :code => nil
+    expect( h.usable? ).to eq(true)
   end
 end

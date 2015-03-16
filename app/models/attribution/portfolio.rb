@@ -30,6 +30,10 @@ class Attribution::Portfolio < ActiveRecord::Base
   def day( date )
     days.where( :date => date ).first_or_create!
   end
+
+  def clear_data_on( date )
+    days.where( :date => date ).destroy_all
+  end
   
   def holdings_on( date )
     day( date ).holdings

@@ -10,6 +10,7 @@
 #  company_id   :integer
 #  day_id       :integer
 #  portfolio_id :integer
+#  code_id      :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

@@ -23,4 +23,5 @@ RSpec.describe Attribution::PortfolioDay, :type => :model do
     allow( day ).to receive(:holdings).and_return
     portfolio_day = day.portfolio_day.performance
   end
+  
 end

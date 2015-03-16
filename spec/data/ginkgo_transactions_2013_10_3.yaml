@@ -1,0 +1,34 @@
+---
+:transactions:
+- &1
+  :code: by
+  :security: Pacira Pharmaceuticals
+  :trade_date: 2013-10-03
+  :settle_date: 2013-10-08
+  :quantity: 9516.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 503053.82
+  :lot: 14.0
+  :cusip: '695127100'
+  :symbol: PCRX
+- &2
+  :code: by
+  :security: Pacira Pharmaceuticals
+  :trade_date: 2013-10-03
+  :settle_date: 2013-10-08
+  :quantity: 6510.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 344020.95
+  :lot: 15.0
+  :cusip: '695127100'
+  :symbol: PCRX
+:stock:
+- *1
+- *2
+:cash: []
+:divs: []
+:other: []

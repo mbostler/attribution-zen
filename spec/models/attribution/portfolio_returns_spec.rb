@@ -24,4 +24,5 @@ RSpec.describe Attribution::PortfolioReturns, :type => :model do
     rets[1] = 1.5
     expect( rets.total ).to eq( 2.25 )
   end
+  
 end

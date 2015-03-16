@@ -10,6 +10,7 @@
 #  company_id   :integer
 #  day_id       :integer
 #  portfolio_id :integer
+#  code_id      :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
@@ -17,6 +18,8 @@
 class Attribution::SecurityDay < ActiveRecord::Base
   belongs_to :company, class_name: "Attribution::Company"
   belongs_to :day, :class_name => "Attribution::Day"
+  belongs_to :code, :class_name => "Attribution::HoldingCode"
+  
   before_save :link_security_data
   
   def link_security_data
@@ -36,5 +39,13 @@ class Attribution::SecurityDay < ActiveRecord::Base
   
   def ticker
     self.company.ticker
+  end
+  
+  def tag
+    cusip || code
+  end
+  
+  def cash_item?
+    cusip.nil?
   end
 end

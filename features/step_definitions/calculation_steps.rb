@@ -29,6 +29,7 @@ Then(/^I should see a listing of portfolio return \-(\d+)\.(\d+)$/) do |arg1, ar
 end
 
 Given(/^a portfolio defined by the calculation data file$/) do
+  pending "need to stub this out bc it is making a remote call yo"
   data_file = File.join Rails.root, "features", "data", "calculation_data.yaml"
   @attribs = YAML.load File.read( data_file )
   puts "value of @attribs is: #{@attribs.inspect}"
@@ -76,7 +77,7 @@ Given(/^a portfolio defined by the calculation data file$/) do
                                     :start_date => d1.date,
                                     :end_date => d3.date
   
-  @report.calculate
+  # @report.calculate
 end
 
 Then(/^I should see cumulative security\-level performance that matches the data file$/) do

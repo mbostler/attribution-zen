@@ -1,7 +1,12 @@
 class Attribution::SecurityPerformanceCalculator
   attr_accessor :day
   
+  def initialize( opts={} )
+    self.day = opts[:day]
+  end
+  
   def calculate
+    puts "value of holdings is: #{holdings.inspect}"
     @security_days = holdings.map do |cusip, h|
       
       eop_weight = calc_eop_weight( h )
@@ -13,9 +18,11 @@ class Attribution::SecurityPerformanceCalculator
         weight: eop_weight, 
         performance: performance,
         contribution: contribution,
-        cusip: h.cusip
+        cusip: h.cusip,
+        code: h.code,
+        day_id: day.id
       )
-    end    
+    end
   end
   
   def results
@@ -25,16 +32,19 @@ class Attribution::SecurityPerformanceCalculator
     end
   end
   
+  # note these are USABLE HOLDINGS!
   def holdings
-    @holdings ||= day.holdings.inject( {} ) do |s, holding|
-      s[holding.cusip] = holding
+    @holdings ||= day.usable_holdings.inject( {} ) do |s, holding|
+      s[holding.tag] = holding
       s
     end
   end
   
+  # note these are USABLE HOLDINGS!
   def prev_holdings
-    @prev_holdings = day.prev_holdings.inject( {} ) do |s, holding|
-      s[holding.cusip] = holding
+    day.prev_day.download unless day.prev_day.completed?
+    @prev_holdings = day.usable_prev_holdings.inject( {} ) do |s, holding|
+      s[holding.tag] = holding
       s
     end
   end
@@ -45,11 +55,17 @@ class Attribution::SecurityPerformanceCalculator
   
   def calc_bop_weight( h )
     prev_h = prev_holdings[h.cusip]
-    BigDecimal(prev_h.market_value.to_s) / prev_h.day.total_market_value
+    num = if !!(prev_h.nil? || prev_h.market_value.nil?)
+      day.transactions.where( cusip: h.cusip ).inject( BigDecimal("0.0") ) { |s, x| s += x }
+    else
+      BigDecimal(prev_h.market_value.to_s)
+    end
+    denom = day.prev_day.total_market_value
+    num / denom
   end
 
   def calc_performance( h )
-    BigDecimal( h.market_value.to_s ) / prev_holdings[h.cusip].market_value
+    Attribution::PerformanceCalculator.calc :holdings => [h], :prev_holdings => [prev_holdings[h.cusip]]
   end
-  
+    
 end

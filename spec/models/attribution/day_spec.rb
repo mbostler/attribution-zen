@@ -37,6 +37,12 @@ RSpec.describe Attribution::Day, :type => :model do
     expect( day.completed? ).to eq(true)
   end
   
+  it 'should not be completed when first created' do
+    port = Attribution::Portfolio.create! name: "bodhi"
+    d = Date.civil 2015, 2, 19
+    day = Attribution::Day.create! :date => d, :portfolio_id => @port.id
+    expect( day.completed? ).to eq( false )
+  end
   
   describe 'when downloading data' do
     it 'should successfully save holdings and transactions' do
@@ -129,6 +135,7 @@ RSpec.describe Attribution::Day, :type => :model do
       day.download
       expect( day.transactions.size ).to eq 1
       expect( day.holdings.size ).to eq 38
+      expect( day.completed? ).to eq( true )
     end
     
     it 'should raise an error if there is no associated portfolio name or date' do
@@ -152,6 +159,22 @@ RSpec.describe Attribution::Day, :type => :model do
       expect( d ).to receive( :ensure_download ).and_return( true )
       
       expect( d.total_market_value ).to eq( 12 )
+    end
+    
+    it 'should only include usable holdings in the total market value cals' do
+      d = Attribution::Day.new
+      expect( d ).to receive(:ensure_download).and_return( true )
+      
+      h1 = Attribution::Holding.new( market_value: 5 )
+      h2 = Attribution::Holding.new( market_value: 7 )
+      h3 = Attribution::Holding.new( market_value: 9 )
+      allow( h1 ).to receive(:usable?).and_return( true )
+      allow( h2 ).to receive(:usable?).and_return( false )
+      allow( h3 ).to receive(:usable?).and_return( true )
+      
+      allow( d ).to receive(:holdings).and_return( [h1, h2, h3] )
+      
+      expect( d.total_market_value ).to eq(14)
     end
   end
   

@@ -1,5 +1,5 @@
 class Attribution::Report
-  attr_accessor :portfolio, :start_date, :end_date, :securities
+  attr_accessor :portfolio, :start_date, :end_date, :securities, :cumulative_security_performances, :cumulative_portfolio_performance, :cumulative_security_contributions
   
   def initialize( opts={} )
     @portfolio = opts[:portfolio]
@@ -8,24 +8,85 @@ class Attribution::Report
   end
   
   def calculate
-    self.securities = Hash.new { |h, k| h[k] = [] }
     ensure_days_are_completely_downloaded
-    days.sort_by(&:date).each do |d|
-      d.security_days.each do |sd|
-        securities[sd.cusip] << sd
-      end
-    end
+    ensure_security_days_are_completely_calculated
+    calculate_cumulative_security_performances
+    calculate_cumulative_portfolio_performance
+    calculate_cumulative_security_contributions
     @results = { :security => security_stats }
   end
   
+  def ensure_security_days_are_completely_calculated
+    days.sort_by(&:date).each do |d|
+      if d.security_days.empty?
+        ActiveRecord::Base.transaction do
+          calculator = Attribution::SecurityPerformanceCalculator.new :day => d
+          calculator.calculate
+        end
+      end
+    end
+  end
+  
+  def calculate_cumulative_security_performances
+    self.securities = Hash.new { |h, k| h[k] = [] }
+    days.sort_by(&:date).each do |d|
+      d.security_days.each do |sd|
+        securities[sd.company_id] << sd
+      end
+    end
+    
+    @cumulative_security_performances = {}
+    securities.each do |company_id, security_days|
+      company = Attribution::Company.find( company_id )
+      puts "value of company is: #{company.inspect}"
+      puts "value of security_days is: #{security_days.inspect}"
+      cumulative_perf = geo_link security_days.map(&:performance)
+      @cumulative_security_performances[company_id] = cumulative_perf
+    end
+    @cumulative_security_performances
+  end
+  
+  def calculate_cumulative_security_contributions
+    @cumulative_security_contributions = {}
+    security_days_by_company = Hash.new { |h, k| h[k] = [] }
+    contribution_days_by_company = Hash.new { |h, k| h[k] = [] }
+    
+    days.sort_by(&:date).each do |d|
+      d.security_days.each do |sd|
+        security_days_by_company[sd.company_id] << sd
+      end
+    end
+    
+    security_days_by_company.each do |company_id, security_days|
+      @cumulative_security_contributions[company_id] = security_contribution( security_days )
+    end
+  end
+  
+  
+  def calculate_cumulative_portfolio_performance
+    range = (@start_date..@end_date)
+    daily_performances = range.to_a.map { |d| @portfolio.day( d ).portfolio_day.performance }
+    @cumulative_portfolio_performance = geo_link daily_performances
+  end
+  
   def days
-    @portfolio.days
+    @portfolio.days.where( :date => @start_date..@end_date )
   end
   
   def ensure_days_are_completely_downloaded
-    days.each do |day|
-      day.download unless day.completed?
+    (@start_date-1..@end_date).each do |date|
+      ensure_day_is_downloaded( date )
     end
+  end
+  
+  def ensure_day_is_downloaded( date )
+    if @portfolio.days.where(:date => date).empty?
+      day = @portfolio.days.create!( :date => date )
+      day.download
+    else
+      day = @portfolio.days.where(:date => date).first
+      day.download unless day.completed?
+    end    
   end
   
   def security_stats
@@ -44,9 +105,10 @@ class Attribution::Report
     hsh = Hash.new { |h, k| h[k] = {} }
     securities.inject(hsh) do |stats, cusip_and_days|
       cusip = cusip_and_days.first
+      ticker = Attribution::Holding.where( :cusip => cusip ).first.ticker
       sec_days = cusip_and_days.last
       
-      stats[cusip][:performance]  = security_performance( sec_days )
+      stats[ticker][:performance]  = security_performance( sec_days )
       stats
     end    
   end
@@ -84,6 +146,51 @@ class Attribution::Report
     @results[:security]
   end
   
+  def audit(ticker=nil)
+    if ticker.nil?
+      audit_portfolio
+    else
+      audit_security( ticker )
+    end
+  end
+  
+  def audit_portfolio
+    cumulative_security_performances.each do |company_id, perf|
+      tag = Holding::Company.find( company_id ).tag
+      puts "#{tag.ljust(10)} | #{perf}"
+    end
+  end
+  
+  def print_results
+    tickers = @results[:security].keys.inject( {} ) do |hsh, cusip|
+      ticker = Attribution::Holding.where( :cusip => cusip ).first.ticker
+      hsh[cusip] = ticker
+      hsh
+    end
+    
+    puts "ATTRIBUTION REPORT FOR #{portfolio.name}"
+    puts "Start date: #{start_date}"
+    puts "End date: #{end_date}"
+    puts "TOTAL RETURN: #{sprintf('%.5f', percentagize( cumulative_portfolio_return ))}"
+    puts "======================================"
+    puts "Ticker |   Return | Contribution"
+    @results[:security].each do |cusip, stats|
+      ticker = tickers[cusip]
+      perf = stats[:performance]
+      contrib = stats[:contribution]
+      puts "#{(ticker || "(na)").ljust(6)} | #{sprintf( '%.5f', percentagize(perf)).rjust(8)} | #{sprintf( '%.5f', contrib*100).rjust(8)}"
+    end
+
+    puts "value of cumulative_portfolio_return is: #{'%.5f' % percentagize(cumulative_portfolio_return)}"
+    summed_contribs = @results[:security].values.inject( BigDecimal("0.0") ) { |s, x| s += x[:contribution] }
+    puts "value of summed_contribs is: #{'%.5f' % summed_contribs}"
+  end
+  
+  # def cumulative_portfolio_return
+  #   range = (@start_date..@end_date)
+  #   geo_link range.to_a.map { |d| @portfolio.days.where( :date => d ).first.portfolio_day.performance }
+  # end
+  #
   # NOTE: this assumes it takes depercentagized numbers!
   def geo_link( nums )
     nums.inject( BigDecimal("1.0") ) { |product, factor| product *= factor }
