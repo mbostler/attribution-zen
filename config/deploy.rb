@@ -4,9 +4,11 @@ lock '3.4.0'
 set :application, 'attribution-zen'
 set :repo_url, 'https://github.com/mbostler/attribution-zen.git'
 
-require 'rvm/capistrano'
-set :rvm_ruby_string, 'ruby-2.2.0@attribution-zen'
-# set :rvm_ruby, '2.2.0'
+# require 'rvm/capistrano'
+set :rvm_type, :system
+set :rvm_ruby_version, 'ruby-2.2.0@attribution-zen'
+# set :rvm_ruby_string, :local
+# set :rvm_add_to_group, 'satori'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call

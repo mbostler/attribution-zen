@@ -54,7 +54,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'guard-rspec'
   gem 'guard-cucumber'
-  gem 'rb-fsevent' if `uname` =~ /Darwin/
+  gem 'rb-fsevent' #if `uname` =~ /Darwin/
   gem 'annotate'
 end
 
