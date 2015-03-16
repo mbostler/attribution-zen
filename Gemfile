@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-# source 'http://darmoxy2:8808'
+source 'http://darmoxy2:8808'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
@@ -26,6 +26,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 ### AXYS ###
 gem 'axys', '>= 0.3.2'
 gem 'gserver'
+gem 'thin'
 ### AXYS ###
 
 # Use ActiveModel has_secure_password
@@ -55,6 +56,12 @@ group :development, :test do
   gem 'guard-cucumber'
   gem 'rb-fsevent' if `uname` =~ /Darwin/
   gem 'annotate'
+end
+
+group :development do
+  gem 'capistrano-bundler', '>= 1.1.0'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
 end
 
 group :test do
