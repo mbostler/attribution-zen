@@ -1,9 +1,12 @@
 # config valid only for current version of Capistrano
-lock '3.3.5'
+lock '3.4.0'
 
 set :application, 'attribution-zen'
 set :repo_url, 'https://github.com/mbostler/attribution-zen.git'
-set :rvm_ruby, '2.2.0'
+
+require 'rvm/capistrano'
+set :rvm_ruby_string, 'ruby-2.2.0@attribution-zen'
+# set :rvm_ruby, '2.2.0'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call

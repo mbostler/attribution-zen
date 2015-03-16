@@ -62,6 +62,7 @@ group :development do
   gem 'capistrano-bundler', '>= 1.1.0'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
+  gem 'rvm-capistrano'
 end
 
 group :test do
