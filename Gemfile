@@ -1,5 +1,10 @@
 source 'https://rubygems.org'
-source 'http://darmoxy2:8808'
+source 'http://darmoxy2:8808' do
+  ### AXYS ###
+  gem 'axys', '>= 0.3.2'
+  gem 'gserver'
+  ### AXYS ###  
+end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
@@ -23,12 +28,9 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-### AXYS ###
-gem 'axys', '>= 0.3.2'
-gem 'gserver'
-gem 'thin'
-### AXYS ###
 
+gem 'thin'
+gem 'exception_notification'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

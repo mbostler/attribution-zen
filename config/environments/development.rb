@@ -38,4 +38,18 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  config.action_mailer.smtp_settings = {
+    # :address => "10.128.13.73", OLD SERVER IP AS OF 10/27/2013
+    # :address => "10.128.12.73",
+   	:address => "daamg1-vwhtcas1.darumanyc.com",
+   	:port => 25,
+   	:enable_starttls_auto => false
+  }
+  
+  config.middleware.use ExceptionNotification::Rack,
+  email: {
+    email_prefix: "[ATTRIBUTION ERROR] ",
+    sender_address: %{"AttributionZen" <noreply@darumanyc.com>},
+    exception_recipients: %w(mjbostler@darumanyc.com)
+  }
 end
