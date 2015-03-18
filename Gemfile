@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 source 'http://darmoxy2:8808' do
   ### AXYS ###
   gem 'axys', '>= 0.3.2'
-  gem 'gserver'
   ### AXYS ###  
 end
 
@@ -32,6 +31,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'thin'
 gem 'exception_notification'
 gem 'dotenv'
+gem 'gserver'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

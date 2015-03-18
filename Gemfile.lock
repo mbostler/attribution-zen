@@ -97,6 +97,7 @@ GEM
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
     diff-lcs (1.2.5)
+    dotenv (2.0.0)
     erubis (2.7.0)
     eventmachine (1.0.7)
     exception_notification (4.0.1)
@@ -291,8 +292,9 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   cucumber-rails
   database_cleaner
+  dotenv
   exception_notification
-  gserver!
+  gserver
   guard-cucumber
   guard-rspec
   jbuilder (~> 2.0)
