@@ -48,6 +48,7 @@ namespace :deploy do
       # Here we can do anything such as:
       within release_path do
         execute "service thin restart -p 8564"
+        execute "ln -s #{File.join(shared_path, '.env')} .env"
       end
     end
   end
