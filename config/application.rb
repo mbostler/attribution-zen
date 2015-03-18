@@ -27,3 +27,5 @@ module AttributionZen
 end
 
 require 'csv'
+require 'dotenv'
+Dotenv.load

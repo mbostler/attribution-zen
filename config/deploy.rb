@@ -43,14 +43,23 @@ set :keep_releases, 5
 
 namespace :deploy do
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
+  desc "restart web server"
+  task :restart_web_server do
+    on roles(:web) do
       within release_path do
         execute "service thin restart -p 8564"
-        execute "ln -s #{File.join(shared_path, '.env')} .env"
-      end
+      end      
     end
   end
+  
+  desc "links up .env file"
+  task :link_env_file do
+    on roles(:web) do
+      execute "ln -s #{File.join(shared_path, '.env')} #{File.join(release_path, '.env')}"      
+    end
+  end
+  
+  after :finishing, :restart_web_server
+  after :finishing, :link_env_file
 
 end
