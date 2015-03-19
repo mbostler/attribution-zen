@@ -16,6 +16,16 @@ class ReportsController < ApplicationController
   def new
     @report = Report.new
   end
+  
+  # GET /reports/generate
+  def generate
+    data_file = Attribution::DataFile.new( Attribution::Day.new )
+    data_file.create
+    ReportMailer.report_email( data_file: data_file ).deliver_now
+    FileUtils.rm( data_file.path ) if File.exists?( data_file.path )
+    # send_file data_file.path
+    redirect_to reports_path, notice: 'Report was successfully generated.'
+  end
 
   # GET /reports/1/edit
   def edit

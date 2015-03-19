@@ -46,10 +46,11 @@ Rails.application.configure do
    	:enable_starttls_auto => false
   }
   
-  config.middleware.use ExceptionNotification::Rack,
-  email: {
-    email_prefix: "[ATTRIBUTION ERROR] ",
-    sender_address: %{"AttributionZen" <noreply@darumanyc.com>},
-    exception_recipients: %w(mjbostler@darumanyc.com)
-  }
+  # uncomment in the event that you want to see exception notifications in development...!
+  # config.middleware.use ExceptionNotification::Rack,
+  # email: {
+  #   email_prefix: "[ATTRIBUTION ERROR] ",
+  #   sender_address: %{"AttributionZen" <noreply@darumanyc.com>},
+  #   exception_recipients: %w(mjbostler@darumanyc.com)
+  # }
 end

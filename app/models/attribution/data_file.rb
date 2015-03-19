@@ -31,4 +31,8 @@ class Attribution::DataFile
   def filename
     "Daily Performance File.csv"
   end
+  
+  def path
+    File.join bkp_dir, filename
+  end
 end
