@@ -1,0 +1,287 @@
+---
+:transactions:
+- &16
+  :code: dp
+  :security: Administrative Fee
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: adminfeepay
+  :trade_amount: 18767.91
+  :cusip: 
+  :symbol: admin
+- &17
+  :code: dp
+  :security: Custodian Fee
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: custfeepay
+  :trade_amount: 3271.31
+  :cusip: 
+  :symbol: cust
+- &18
+  :code: dp
+  :security: Administrative Fee
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: adminfeepay
+  :trade_amount: 1250.0
+  :cusip: 
+  :symbol: admin
+- &19
+  :code: dp
+  :security: Accounting Fee
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: acctfeepay
+  :trade_amount: 3062.5
+  :cusip: 
+  :symbol: acct
+- &20
+  :code: dp
+  :security: Ticket Fees
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: ticketfeepay
+  :trade_amount: 1040.0
+  :cusip: 
+  :symbol: ticket
+- &21
+  :code: dp
+  :security: Management Fee
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: manfeepay
+  :trade_amount: 253063.18
+  :cusip: 
+  :symbol: manfee
+- &14
+  :code: li
+  :security: Cash
+  :trade_date: 2014-10-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 673000.0
+  :cusip: 
+  :symbol: cash
+- &15
+  :code: lo
+  :security: Cash
+  :trade_date: 2014-10-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 2000000.0
+  :cusip: 
+  :symbol: cash
+- &1
+  :code: by
+  :security: Lumber Liquidators
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 16659.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 941215.18
+  :lot: 536.0
+  :cusip: 55003T107
+  :symbol: LL
+- &2
+  :code: by
+  :security: H.B. Fuller Co.
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 15129.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 594006.9
+  :lot: 8.0
+  :cusip: '359694106'
+  :symbol: FUL
+- &3
+  :code: by
+  :security: Digitalglobe
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 12526.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 356236.93
+  :lot: 112.0
+  :cusip: 25389M877
+  :symbol: DGI
+- &4
+  :code: by
+  :security: Oxford Industries
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 5042.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 301599.33
+  :lot: 129.0
+  :cusip: '691497309'
+  :symbol: OXM
+- &5
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 2270.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 57230.2
+  :lot: 51.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &6
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 19213.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 484389.35
+  :lot: 47.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &7
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 135.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 3403.56
+  :lot: 120.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &8
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 66.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 1663.96
+  :lot: 167.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &9
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 8081.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 203734.47
+  :lot: 48.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &10
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 8327.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 210959.88
+  :lot: 48.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &11
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 115.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 2913.46
+  :lot: 121.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &12
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 56.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 1418.73
+  :lot: 168.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &13
+  :code: sl
+  :security: Microsemi
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-06
+  :quantity: 10631.0
+  :close_method: h
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 269330.42
+  :lot: 49.0
+  :cusip: '595137100'
+  :symbol: MSCC
+- &22
+  :code: wd
+  :security: Accrued Interest Income
+  :trade_date: 2014-10-01
+  :settle_date: 2014-10-01
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 86.52
+  :cusip: 
+  :symbol: intacc
+:stock:
+- *1
+- *2
+- *3
+- *4
+- *5
+- *6
+- *7
+- *8
+- *9
+- *10
+- *11
+- *12
+- *13
+:cash:
+- *14
+- *15
+:divs: []
+:other:
+- *16
+- *17
+- *18
+- *19
+- *20
+- *21
+- *22

@@ -76,7 +76,8 @@ class Attribution::Holding < ActiveRecord::Base
   end
   
   def tag
-    cusip || code.name
+    company.id
+    # cusip || code.name
   end
   
 end

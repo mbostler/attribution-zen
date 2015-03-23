@@ -12,8 +12,23 @@ class Attribution::PerformanceCalculator
   end
 
   def calculate
-    sleep(0.5)
-    BigDecimal(emv.to_s) / (bmv || 1)
+    txns = sales - purchases
+    txns *= -1 if cash_holding?
+    num = BigDecimal(emv.to_s) + txns
+    denom = bmv
+    num / (denom || 1)
+  end
+  
+  def cash_holding?
+    @holdings.first.company.tag == "cash"
+  end
+  
+  def sales
+    @transactions.sales.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }
+  end
+  
+  def purchases
+    @transactions.purchases.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }
   end
   
   def emv

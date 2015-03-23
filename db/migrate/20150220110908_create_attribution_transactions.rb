@@ -12,6 +12,7 @@ class CreateAttributionTransactions < ActiveRecord::Migration
       t.string :cusip
       t.string :symbol
       t.integer :day_id
+      t.integer :company_id
       t.string :close_method
       t.string :lot
 

@@ -6,28 +6,26 @@ class Attribution::SecurityPerformanceCalculator
   end
   
   def calculate
-    puts "value of holdings is: #{holdings.inspect}"
     @security_days = holdings.map do |cusip, h|
-      
       eop_weight = calc_eop_weight( h )
       performance = calc_performance( h )
-      contribution = calc_bop_weight( h ) * (performance-1)
+      contribution = calc_bop_weight( h ) * (performance-1)      
       
-      h.associate_company
+      h.associate_company if h.company_id.blank?
       sd = Attribution::SecurityDay.create!(
         weight: eop_weight, 
         performance: performance,
         contribution: contribution,
-        cusip: h.cusip,
-        code: h.code,
+        company_id: h.company_id,
         day_id: day.id
       )
+      sd
     end
   end
   
   def results
     @security_days.inject( {} ) do |hsh, security_day|
-      hsh[security_day.ticker] = security_day
+      hsh[security_day.tag] = security_day
       hsh
     end
   end
@@ -54,7 +52,7 @@ class Attribution::SecurityPerformanceCalculator
   end
   
   def calc_bop_weight( h )
-    prev_h = prev_holdings[h.cusip]
+    prev_h = prev_holdings[h.tag]
     num = if !!(prev_h.nil? || prev_h.market_value.nil?)
       day.transactions.where( cusip: h.cusip ).inject( BigDecimal("0.0") ) { |s, x| s += x }
     else
@@ -65,7 +63,18 @@ class Attribution::SecurityPerformanceCalculator
   end
 
   def calc_performance( h )
-    Attribution::PerformanceCalculator.calc :holdings => [h], :prev_holdings => [prev_holdings[h.cusip]]
+    perf = Attribution::PerformanceCalculator.calc holdings: [h], 
+                                                   prev_holdings: [prev_holdings[h.tag]],
+                                                   transactions: transactions_for_holding( h )
+    perf
+  end
+  
+  def transactions_for_holding( holding )
+    if holding.company.tag == "cash"
+      Attribution::Transaction.where( day_id: holding.day_id )
+     else
+      Attribution::Transaction.where( day_id: holding.day_id, company_id: holding.company_id )
+    end
   end
     
 end

@@ -38,10 +38,9 @@ class Attribution::Report
     @cumulative_security_performances = {}
     securities.each do |company_id, security_days|
       company = Attribution::Company.find( company_id )
-      puts "value of company is: #{company.inspect}"
-      puts "value of security_days is: #{security_days.inspect}"
+      puts "#{company.tag.ljust(10)} | #{security_days.inspect}"
       cumulative_perf = geo_link security_days.map(&:performance)
-      @cumulative_security_performances[company_id] = cumulative_perf
+      @cumulative_security_performances[company.tag] = cumulative_perf
     end
     @cumulative_security_performances
   end
@@ -58,7 +57,8 @@ class Attribution::Report
     end
     
     security_days_by_company.each do |company_id, security_days|
-      @cumulative_security_contributions[company_id] = security_contribution( security_days )
+      company = Attribution::Company.find( company_id )
+      @cumulative_security_contributions[company.tag] = security_contribution( security_days )
     end
   end
   
@@ -155,9 +155,8 @@ class Attribution::Report
   end
   
   def audit_portfolio
-    cumulative_security_performances.each do |company_id, perf|
-      tag = Holding::Company.find( company_id ).tag
-      puts "#{tag.ljust(10)} | #{perf}"
+    cumulative_security_performances.each do |company_tag, perf|
+      puts "#{company_tag.ljust(10)} | #{perf}"
     end
   end
   
@@ -209,5 +208,11 @@ class Attribution::Report
   
   def sum( nums )
     nums.inject( BigDecimal("0.0") ) { |sum, addend| sum += addend }
+  end
+  
+  def lookup_security_days( tag )
+    c = Attribution::Company.find_by_tag( tag )
+    return nil unless c
+    c.security_days.where( :day_id => days.map(&:id) )
   end
 end

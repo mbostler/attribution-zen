@@ -14,6 +14,7 @@
 #  cusip        :string
 #  symbol       :string
 #  day_id       :integer
+#  company_id   :integer
 #  close_method :string
 #  lot          :string
 #  created_at   :datetime         not null

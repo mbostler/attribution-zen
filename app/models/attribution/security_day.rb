@@ -10,7 +10,6 @@
 #  company_id   :integer
 #  day_id       :integer
 #  portfolio_id :integer
-#  code_id      :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
@@ -21,9 +20,10 @@ class Attribution::SecurityDay < ActiveRecord::Base
   belongs_to :code, :class_name => "Attribution::HoldingCode"
   
   before_save :link_security_data
-  
+
   def link_security_data
-    if !!self.company && self.company.cusip == self.cusip
+    return if !!self.company_id
+    if self.company and self.company.cusip == self.cusip
       return
     else
       c = Attribution::Company.
@@ -42,10 +42,12 @@ class Attribution::SecurityDay < ActiveRecord::Base
   end
   
   def tag
-    cusip || code
+    self.company.tag
   end
   
   def cash_item?
     cusip.nil?
   end
+  
+  
 end

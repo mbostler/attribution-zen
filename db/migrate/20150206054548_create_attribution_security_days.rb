@@ -8,7 +8,6 @@ class CreateAttributionSecurityDays < ActiveRecord::Migration
       t.integer :company_id
       t.integer :day_id
       t.integer :portfolio_id
-      t.integer :code_id
 
       t.timestamps null: false
     end

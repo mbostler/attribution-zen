@@ -53,6 +53,7 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
       
       expect( calculator.day.prev_day.total_market_value ).to eq( 200 )
 
+      expect( results.values.first.tag ).to eq( "A" )
       expect( results["A"].class ).to eq( Attribution::SecurityDay )
       expect( results["A"].weight ).to eq( 0.2 )
       expect( results["A"].performance ).to eq( 1.6 )
@@ -111,6 +112,34 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
 
       expect( sec_days.size ).to eq( 3 )
       expect( sec_days.first.day_id ).to eq( day1.id )
+    end
+    
+    it 'correctly calcs divacc performance on 10-3-2014' do
+      @portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
+    
+      date = Date.civil 2013, 10, 3
+      txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_3.yaml"))
+      expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+
+      date = Date.civil 2013, 10, 4
+      txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_4.yaml"))
+      expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+
+      date = Date.civil 2013, 10, 3
+      attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_3.yaml"))
+      expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
+
+      date = Date.civil 2013, 10, 4
+      attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_4.yaml"))
+      expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
+
+      @rep = Attribution::Report.new portfolio: @portfolio, start_date: date, end_date: date
+      
+      @rep.ensure_days_are_completely_downloaded
+      @rep.ensure_security_days_are_completely_calculated
+      
+      day = @rep.lookup_security_days( "divacc" ).last
+      expect( day.performance ).to eq( 1.0 )
     end
     
       

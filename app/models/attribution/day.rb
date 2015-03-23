@@ -53,6 +53,11 @@ module Attribution
     end
     
     def compute_portfolio_day
+      puts "***TXNS***"
+      puts "value of transactions is: #{transactions.inspect}"
+      # adj_txns = transactions + transactions.inject([]) do |adjs, txn|
+      #   adjs << Attribution::Transaction.build( )
+      # end
       perf = Attribution::PerformanceCalculator.calc :holdings => usable_holdings, :prev_holdings => usable_prev_holdings, :transactions => transactions
       pd = self.create_portfolio_day! :performance => perf
       pd
@@ -103,7 +108,8 @@ module Attribution
       rep = Axys::TransactionsWithSecuritiesReport.run! portfolio_name: portfolio.name, start: self.date, end: self.date
       
       rep[:transactions].each do |transaction|
-        transactions.create! transaction
+        company = Attribution::Company.where( ticker: transaction[:symbol], cusip: transaction[:cusip] ).first_or_create
+        transactions.create! transaction.merge( company_id: company.id )
       end
     end
     

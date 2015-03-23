@@ -14,6 +14,7 @@
 #  cusip        :string
 #  symbol       :string
 #  day_id       :integer
+#  company_id   :integer
 #  close_method :string
 #  lot          :string
 #  created_at   :datetime         not null
@@ -22,4 +23,7 @@
 
 class Attribution::Transaction < ActiveRecord::Base
   belongs_to :day, class_name: "Attribution:Day"
+  
+  scope :sales, -> { where( code: "sl" ) }
+  scope :purchases, -> { where( code: "by" ) }
 end

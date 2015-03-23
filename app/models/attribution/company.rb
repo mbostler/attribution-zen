@@ -17,6 +17,14 @@ class Attribution::Company < ActiveRecord::Base
   has_many :security_days, class_name: "Attribution::SecurityDay"
   
   def tag
-    self.ticker || self.code
+    self.ticker || self.code.name
+  end
+  
+  def self.find_by_tag( tag )
+    c = where( ticker: tag ).first
+    return c unless c.nil?
+    
+    hc = Attribution::HoldingCode.where( name: tag ).first
+    where( code_id: hc.id ).first
   end
 end

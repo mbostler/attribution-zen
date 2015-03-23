@@ -92,7 +92,6 @@ ActiveRecord::Schema.define(version: 20150301193524) do
     t.integer  "company_id"
     t.integer  "day_id"
     t.integer  "portfolio_id"
-    t.integer  "code_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
@@ -115,6 +114,7 @@ ActiveRecord::Schema.define(version: 20150301193524) do
     t.string   "cusip"
     t.string   "symbol"
     t.integer  "day_id"
+    t.integer  "company_id"
     t.string   "close_method"
     t.string   "lot"
     t.datetime "created_at",   null: false
