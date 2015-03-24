@@ -14,7 +14,7 @@
 
 class Attribution::Company < ActiveRecord::Base
   belongs_to :code, class_name: "Attribution::HoldingCode"
-  has_many :security_days, class_name: "Attribution::SecurityDay"
+  has_many :security_days, class_name: "Attribution::SecurityDay", dependent: :destroy
   
   def tag
     self.ticker || self.code.name

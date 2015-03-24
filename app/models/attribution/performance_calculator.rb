@@ -11,13 +11,19 @@ class Attribution::PerformanceCalculator
     @transactions = opts[:transactions]
     @treat_as_cash = opts[:treat_as_cash]
     @treat_as_total = opts[:treat_as_total]
+    @treat_as_intacc = opts[:treat_as_intacc]
   end
 
   def calculate
-    txns = sales - purchases
+    txns = sales + los - purchases - lis - ins + wds
     txns *= -1 if @treat_as_cash
-    num = BigDecimal(emv.to_s) + txns
-    denom = bmv
+    txns -= ins if @treat_as_intacc
+    num = if bmv.zero?
+      BigDecimal(emv.to_s)
+    else
+      BigDecimal(emv.to_s) + txns
+    end
+    denom = bmv.zero? ? (purchases + lis + ins) : bmv
     num / (denom || 1)
   end
   
@@ -33,6 +39,22 @@ class Attribution::PerformanceCalculator
   def purchases
     return 0 if @treat_as_total
     @transactions.purchases.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }
+  end
+  
+  def lis
+    @transactions.lis.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }    
+  end
+  
+  def ins
+    @transactions.ins.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }    
+  end
+  
+  def wds
+    @transactions.wds.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }    
+  end
+  
+  def los
+    @transactions.lis.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }    
   end
   
   def emv

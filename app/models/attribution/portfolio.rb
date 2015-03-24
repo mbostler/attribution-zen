@@ -13,9 +13,9 @@
 class Attribution::Portfolio < ActiveRecord::Base
   attr_accessor :returns
   attr_reader :total_performance
-  has_many :days, :class_name => "Attribution::Day"
-  has_many :holdings, :through => :days
-  has_many :transactions, :through => :days
+  has_many :days, :class_name => "Attribution::Day", :dependent => :destroy
+  has_many :holdings, :through => :days, dependent: :destroy
+  has_many :transactions, :through => :days, dependent: :destroy
 
   after_initialize :set_portfolio_returns
   

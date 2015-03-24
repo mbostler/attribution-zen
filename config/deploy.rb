@@ -47,7 +47,7 @@ namespace :deploy do
   task :restart_web_server do
     on roles(:web) do
       within release_path do
-        execute "service thin restart -p 8564"
+        execute "service thin restart"
       end      
     end
   end

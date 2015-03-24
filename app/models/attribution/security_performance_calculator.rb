@@ -6,6 +6,7 @@ class Attribution::SecurityPerformanceCalculator
   end
   
   def calculate
+    day.compute_portfolio_day unless day.completed?
     @security_days = holdings.map do |cusip, h|
       eop_weight = calc_eop_weight( h )
       performance = calc_performance( h )
@@ -40,7 +41,7 @@ class Attribution::SecurityPerformanceCalculator
   
   # note these are USABLE HOLDINGS!
   def prev_holdings
-    day.prev_day.download unless day.prev_day.completed?
+    day.prev_day.download unless day.prev_day.downloaded?
     @prev_holdings = day.usable_prev_holdings.inject( {} ) do |s, holding|
       s[holding.tag] = holding
       s
@@ -54,7 +55,8 @@ class Attribution::SecurityPerformanceCalculator
   def calc_bop_weight( h )
     prev_h = prev_holdings[h.tag]
     num = if !!(prev_h.nil? || prev_h.market_value.nil?)
-      day.transactions.where( cusip: h.cusip ).inject( BigDecimal("0.0") ) { |s, x| s += x }
+      txns = day.transactions.where( cusip: h.cusip )
+      txns.inject( BigDecimal("0.0") ) { |s, txn| s += txn.trade_amount }
     else
       BigDecimal(prev_h.market_value.to_s)
     end
@@ -73,6 +75,8 @@ class Attribution::SecurityPerformanceCalculator
   def transactions_for_holding( holding )
     if holding.company.tag == "cash"
       Attribution::Transaction.where( day_id: holding.day_id )
+     # elsif holding.company.tag == "intacc"
+     #   Attribution::Transaction.where( day_id: holding.day_id, company_id: holding.company_id )
      else
       Attribution::Transaction.where( day_id: holding.day_id, company_id: holding.company_id )
     end

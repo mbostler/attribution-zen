@@ -19,7 +19,8 @@ class ReportsController < ApplicationController
   
   # GET /reports/generate
   def generate
-    data_file = Attribution::DataFile.new( Attribution::Day.new )
+    day = Attribution::Day.where( :date => Date.yesterday ).first_or_create
+    data_file = Attribution::DataFile.new( day )
     data_file.create
     ReportMailer.report_email( data_file: data_file ).deliver_now
     FileUtils.rm( data_file.path ) if File.exists?( data_file.path )

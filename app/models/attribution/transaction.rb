@@ -26,4 +26,8 @@ class Attribution::Transaction < ActiveRecord::Base
   
   scope :sales, -> { where( code: "sl" ) }
   scope :purchases, -> { where( code: "by" ) }
+  scope :lis, -> { where( code: "li" ) }
+  scope :los, -> { where( code: "lo" ) }
+  scope :ins, -> { where( code: "in" ) }
+  scope :wds, -> { where( code: "wd" ) }
 end

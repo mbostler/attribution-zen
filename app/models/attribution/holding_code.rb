@@ -23,8 +23,8 @@ class Attribution::HoldingCode < ActiveRecord::Base
     
   }
   
-  has_many :holdings, class_name: "Attribution::Holding"
-  has_many :companies, class_name: "Attribution::Company"
+  has_many :holdings, class_name: "Attribution::Holding", dependent: :destroy
+  has_many :companies, class_name: "Attribution::Company", dependent: :destroy
   
   def self.usable_code?( code )
     code_usability = CODES[code]
