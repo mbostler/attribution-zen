@@ -63,4 +63,15 @@ RSpec.describe Attribution::Holding, :type => :model do
     h = Attribution::Holding.new :code => nil
     expect( h.usable? ).to eq(true)
   end
+  
+  it 'should properly distinguish its cash type' do
+    cash_type = Attribution::HoldingType.where( name: "Cash" ).first_or_create
+    non_cash_type = Attribution::HoldingType.where( name: "Security" ).first_or_create
+    
+    cash_holding = Attribution::Holding.new type_id: cash_type.id
+    non_cash_holding = Attribution::Holding.new type_id: non_cash_type.id
+    
+    expect( cash_holding.cash_type? ).to eq(true)
+    expect( non_cash_holding.cash_type? ).to eq(false)
+  end
 end

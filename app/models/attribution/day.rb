@@ -58,7 +58,10 @@ module Attribution
       # adj_txns = transactions + transactions.inject([]) do |adjs, txn|
       #   adjs << Attribution::Transaction.build( )
       # end
-      perf = Attribution::PerformanceCalculator.calc :holdings => usable_holdings, :prev_holdings => usable_prev_holdings, :transactions => transactions
+      perf = Attribution::PerformanceCalculator.calc :holdings => usable_holdings, 
+                                                     :prev_holdings => usable_prev_holdings, 
+                                                     :transactions => transactions,
+                                                     :treat_as_total => true
       pd = self.create_portfolio_day! :performance => perf
       pd
     end

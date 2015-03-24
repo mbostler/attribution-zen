@@ -9,11 +9,13 @@ class Attribution::PerformanceCalculator
     @holdings = opts[:holdings]
     @prev_holdings = opts[:prev_holdings]
     @transactions = opts[:transactions]
+    @treat_as_cash = opts[:treat_as_cash]
+    @treat_as_total = opts[:treat_as_total]
   end
 
   def calculate
     txns = sales - purchases
-    txns *= -1 if cash_holding?
+    txns *= -1 if @treat_as_cash
     num = BigDecimal(emv.to_s) + txns
     denom = bmv
     num / (denom || 1)
@@ -24,10 +26,12 @@ class Attribution::PerformanceCalculator
   end
   
   def sales
+    return 0 if @treat_as_total
     @transactions.sales.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }
   end
   
   def purchases
+    return 0 if @treat_as_total
     @transactions.purchases.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }
   end
   

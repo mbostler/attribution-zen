@@ -156,7 +156,7 @@ class Attribution::Report
   
   def audit_portfolio
     cumulative_security_performances.each do |company_tag, perf|
-      puts "#{company_tag.ljust(10)} | #{perf}"
+      puts "#{company_tag.ljust(10)} | #{percentagize( perf ).round(4)}"
     end
   end
   

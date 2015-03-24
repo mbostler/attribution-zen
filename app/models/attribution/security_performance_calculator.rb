@@ -65,7 +65,8 @@ class Attribution::SecurityPerformanceCalculator
   def calc_performance( h )
     perf = Attribution::PerformanceCalculator.calc holdings: [h], 
                                                    prev_holdings: [prev_holdings[h.tag]],
-                                                   transactions: transactions_for_holding( h )
+                                                   transactions: transactions_for_holding( h ),
+                                                   treat_as_cash: h.cash_type?
     perf
   end
   

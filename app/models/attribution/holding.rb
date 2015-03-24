@@ -80,4 +80,8 @@ class Attribution::Holding < ActiveRecord::Base
     # cusip || code.name
   end
   
+  def cash_type?
+    type_name.upcase == "CASH"
+  end
+  
 end
