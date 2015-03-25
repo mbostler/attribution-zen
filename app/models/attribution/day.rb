@@ -58,14 +58,7 @@ module Attribution
     end
     
     def compute_portfolio_day
-      puts "***TXNS***"
-      puts "value of transactions is: #{transactions.inspect}"
-      # adj_txns = transactions + transactions.inject([]) do |adjs, txn|
-      #   adjs << Attribution::Transaction.build( )
-      # end
-      puts "usable_holdings is : " + usable_holdings.inspect
-      puts "usable_prev_holdings is : " + usable_prev_holdings.inspect
-      puts "transactions is : " + transactions.inspect
+      puts "computing portfolio day for #{self.date}"
       perf = Attribution::PerformanceCalculator.calc :holdings => usable_holdings, 
                                                      :prev_holdings => usable_prev_holdings, 
                                                      :transactions => transactions,
@@ -150,7 +143,7 @@ module Attribution
     
     def total_market_value
       ensure_download
-      puts "self.usable_holdings is : " + self.usable_holdings.inspect
+      # puts "self.usable_holdings is : " + self.usable_holdings.inspect
       self.usable_holdings.inject( BigDecimal( "0.0") ) { |s, h| s += h.market_value }
       # puts "usable holdings!:"
       # print_holdings( self.usable_holdings )

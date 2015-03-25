@@ -5,6 +5,10 @@ class Attribution::PerformanceCalculator
     new( opts ).calculate
   end
   
+  def self.audit( opts )
+    new( opts ).audit    
+  end
+  
   def initialize( opts={} )
     @holdings = opts[:holdings]
     @prev_holdings = opts[:prev_holdings]
@@ -15,16 +19,35 @@ class Attribution::PerformanceCalculator
   end
 
   def calculate
-    txns = sales + los - purchases - lis - ins + wds
-    txns *= -1 if @treat_as_cash
-    txns -= ins if @treat_as_intacc
-    num = if bmv.zero?
+    num / (denom || 1)
+  end
+  
+  def txns
+    t = sales + los - purchases - lis - ins + wds
+    t *= -1 if @treat_as_cash
+    t -= ins if @treat_as_intacc
+    t
+  end
+  
+  def denom
+    bmv.zero? ? (purchases + lis + ins) : bmv
+  end
+  
+  def num
+    if bmv.zero?
       BigDecimal(emv.to_s)
     else
       BigDecimal(emv.to_s) + txns
     end
-    denom = bmv.zero? ? (purchases + lis + ins) : bmv
-    num / (denom || 1)
+  end
+  
+  def audit
+    puts "value of @treat_as_cash is: #{@treat_as_cash.inspect}"
+    puts "value of @treat_as_total is: #{@treat_as_total.inspect}"
+    puts "value of @treat_as_intacc is: #{@treat_as_intacc.inspect}"
+    [:sales, :purchases, :lis, :ins, :wds, :los, :emv, :bmv, :txns, :num, :denom, :calculate].each do |stat|
+      puts "\t#{stat.to_s}: #{send(stat)}"
+    end
   end
   
   def cash_holding?

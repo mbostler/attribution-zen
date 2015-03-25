@@ -1,0 +1,390 @@
+---
+:portfolio_name: Daruma Ginkgo Fund, LP
+:date: 2015-02-27
+:account_number: 
+:holdings:
+- :quantity: 598481.0
+  :ticker: ACXM
+  :cusip: 005125109
+  :security: Acxiom
+  :unit_cost: 14.73
+  :total_cost: 8816061.75
+  :price: 20.0
+  :market_value: 11969620.0
+  :pct_assets: 3.9
+  :yield: 0.0
+- :quantity: 587890.0
+  :ticker: RATE
+  :cusip: 06647F102
+  :security: Bankrate Inc.
+  :unit_cost: 17.09
+  :total_cost: 10048411.41
+  :price: 12.76
+  :market_value: 7501476.4
+  :pct_assets: 2.5
+  :yield: 0.0
+- :quantity: 346508.0
+  :ticker: BECN
+  :cusip: 073685109
+  :security: Beacon Roofing
+  :unit_cost: 30.32
+  :total_cost: 10506088.67
+  :price: 30.02
+  :market_value: 10402170.16
+  :pct_assets: 3.4
+  :yield: 0.0
+- :quantity: 184113.0
+  :ticker: BC
+  :cusip: '117043109'
+  :security: Brunswick
+  :unit_cost: 21.35
+  :total_cost: 3930024.88
+  :price: 54.24
+  :market_value: 9986289.12
+  :pct_assets: 3.3
+  :yield: 0.7
+- :quantity: 499044.0
+  :ticker: CDNS
+  :cusip: '127387108'
+  :security: Cadence Design
+  :unit_cost: 9.25
+  :total_cost: 4617717.96
+  :price: 18.36
+  :market_value: 9159952.62
+  :pct_assets: 3.0
+  :yield: 0.0
+- :quantity: 173639.0
+  :ticker: CRZO
+  :cusip: '144577103'
+  :security: Carrizo Oil & Gas
+  :unit_cost: 26.78
+  :total_cost: 4650055.11
+  :price: 47.59
+  :market_value: 8263480.01
+  :pct_assets: 2.7
+  :yield: 0.0
+- :quantity: 250203.0
+  :ticker: CTCT
+  :cusip: '210313102'
+  :security: Constant Contact Inc.
+  :unit_cost: 30.46
+  :total_cost: 7621279.88
+  :price: 41.33
+  :market_value: 10340889.99
+  :pct_assets: 3.4
+  :yield: 0.0
+- :quantity: 35743.0
+  :ticker: CSGP
+  :cusip: 22160N109
+  :security: Costar Group
+  :unit_cost: 31.33
+  :total_cost: 1120000.13
+  :price: 199.16
+  :market_value: 7118575.88
+  :pct_assets: 2.3
+  :yield: 0.0
+- :quantity: 263775.0
+  :ticker: TRAK
+  :cusip: '242309102'
+  :security: Dealertrack
+  :unit_cost: 29.94
+  :total_cost: 7898515.16
+  :price: 39.77
+  :market_value: 10490331.75
+  :pct_assets: 3.4
+  :yield: 0.0
+- :quantity: 268856.0
+  :ticker: DBD
+  :cusip: '253651103'
+  :security: Diebold Inc.
+  :unit_cost: 32.64
+  :total_cost: 8774296.07
+  :price: 35.7
+  :market_value: 9598159.2
+  :pct_assets: 3.1
+  :yield: 3.2
+- :quantity: 363255.0
+  :ticker: DGI
+  :cusip: 25389M877
+  :security: Digitalglobe
+  :unit_cost: 25.67
+  :total_cost: 9323072.56
+  :price: 33.25
+  :market_value: 12078228.75
+  :pct_assets: 4.0
+  :yield: 0.0
+- :quantity: 250152.0
+  :ticker: EFII
+  :cusip: '286082102'
+  :security: Electronics For Imaging
+  :unit_cost: 37.34
+  :total_cost: 9341054.88
+  :price: 40.6
+  :market_value: 10156171.2
+  :pct_assets: 3.3
+  :yield: 0.0
+- :quantity: 478848.0
+  :ticker: FRAN
+  :cusip: '351793104'
+  :security: Francesca's Holdings
+  :unit_cost: 22.43
+  :total_cost: 10742556.08
+  :price: 14.99
+  :market_value: 7177931.52
+  :pct_assets: 2.4
+  :yield: 0.0
+- :quantity: 245710.0
+  :ticker: FUL
+  :cusip: '359694106'
+  :security: H.B. Fuller Co.
+  :unit_cost: 39.26
+  :total_cost: 9646285.88
+  :price: 44.7
+  :market_value: 10983237.0
+  :pct_assets: 3.6
+  :yield: 1.1
+- :quantity: 250957.0
+  :ticker: HLS
+  :cusip: '421924309'
+  :security: Healthsouth
+  :unit_cost: 22.21
+  :total_cost: 5572807.21
+  :price: 43.46
+  :market_value: 10906591.22
+  :pct_assets: 3.6
+  :yield: 1.7
+- :quantity: 271304.0
+  :ticker: PODD
+  :cusip: 45784P101
+  :security: Insulet
+  :unit_cost: 27.21
+  :total_cost: 7382465.67
+  :price: 31.73
+  :market_value: 8608475.92
+  :pct_assets: 2.8
+  :yield: 0.0
+- :quantity: 191321.0
+  :ticker: LL
+  :cusip: 55003T107
+  :security: Lumber Liquidators
+  :unit_cost: 55.94
+  :total_cost: 10702019.12
+  :price: 51.86
+  :market_value: 9921907.06
+  :pct_assets: 3.3
+  :yield: 0.0
+- :quantity: 151356.0
+  :ticker: MNRO
+  :cusip: '610236101'
+  :security: Monro Muffler Brake
+  :unit_cost: 39.01
+  :total_cost: 5903782.76
+  :price: 63.24
+  :market_value: 9571753.44
+  :pct_assets: 3.1
+  :yield: 0.8
+- :quantity: 256783.0
+  :ticker: ASGN
+  :cusip: '682159108'
+  :security: On Assignment
+  :unit_cost: 27.4
+  :total_cost: 7036251.33
+  :price: 38.21
+  :market_value: 9811678.43
+  :pct_assets: 3.2
+  :yield: 0.0
+- :quantity: 129118.0
+  :ticker: OXM
+  :cusip: '691497309'
+  :security: Oxford Industries
+  :unit_cost: 57.83
+  :total_cost: 7467071.38
+  :price: 55.03
+  :market_value: 7105363.54
+  :pct_assets: 2.3
+  :yield: 1.5
+- :quantity: 72632.0
+  :ticker: PCRX
+  :cusip: '695127100'
+  :security: Pacira Pharmaceuticals
+  :unit_cost: 41.4
+  :total_cost: 3006740.58
+  :price: 114.77
+  :market_value: 8335974.64
+  :pct_assets: 2.7
+  :yield: 0.0
+- :quantity: 126712.0
+  :ticker: ROG
+  :cusip: '775133101'
+  :security: Rogers Corporation
+  :unit_cost: 40.52
+  :total_cost: 5134648.82
+  :price: 78.28
+  :market_value: 9919015.36
+  :pct_assets: 3.2
+  :yield: 0.0
+- :quantity: 249549.0
+  :ticker: SHLM
+  :cusip: '808194104'
+  :security: Schulman
+  :unit_cost: 26.75
+  :total_cost: 6674806.9
+  :price: 42.58
+  :market_value: 10625796.42
+  :pct_assets: 3.5
+  :yield: 1.9
+- :quantity: 1010978.0
+  :ticker: STNG
+  :cusip: Y7542C106
+  :security: Scorpio Tankers
+  :unit_cost: 10.67
+  :total_cost: 10788312.13
+  :price: 8.66
+  :market_value: 8755069.48
+  :pct_assets: 2.9
+  :yield: 4.2
+- :quantity: 694196.0
+  :ticker: STKL
+  :cusip: 8676EP108
+  :security: Sunopta Inc.
+  :unit_cost: 11.31
+  :total_cost: 7854321.32
+  :price: 11.55
+  :market_value: 8017963.8
+  :pct_assets: 2.6
+  :yield: 0.0
+- :quantity: 843235.0
+  :ticker: TTI
+  :cusip: 88162F105
+  :security: Tetra Technologies
+  :unit_cost: 11.02
+  :total_cost: 9294193.87
+  :price: 5.97
+  :market_value: 5034112.95
+  :pct_assets: 1.6
+  :yield: 0.0
+- :quantity: 201556.0
+  :ticker: TCBI
+  :cusip: 88224Q107
+  :security: Texas Capital Banc
+  :unit_cost: 42.94
+  :total_cost: 8654007.35
+  :price: 46.43
+  :market_value: 9358245.08
+  :pct_assets: 3.1
+  :yield: 0.0
+- :quantity: 479211.0
+  :ticker: VRA
+  :cusip: 92335C106
+  :security: Vera Bradley
+  :unit_cost: 23.22
+  :total_cost: 11125276.88
+  :price: 19.99
+  :market_value: 9579427.89
+  :pct_assets: 3.1
+  :yield: 0.0
+- :quantity: 82962.0
+  :ticker: WEX
+  :cusip: 96208T104
+  :security: WEX
+  :unit_cost: 39.91
+  :total_cost: 3311220.18
+  :price: 106.99
+  :market_value: 8876104.38
+  :pct_assets: 2.9
+  :yield: 0.0
+- :quantity: 100209.0
+  :ticker: WAB
+  :cusip: '929740108'
+  :security: Wabtec
+  :unit_cost: 13.59
+  :total_cost: 1361426.55
+  :price: 94.89
+  :market_value: 9508832.01
+  :pct_assets: 3.1
+  :yield: 0.2
+- :quantity: 116274.0
+  :ticker: WCG
+  :cusip: 94946T106
+  :security: Wellcare Health Plans
+  :unit_cost: 47.78
+  :total_cost: 5555933.93
+  :price: 90.81
+  :market_value: 10558841.94
+  :pct_assets: 3.5
+  :yield: 0.0
+:total_holdings:
+  :total_cost: 223860706.39
+  :market_value: 289721667.16
+  :pct_assets: 94.9
+  :yield: 0.5
+:cash_and_equivalents:
+  :total_cost: 15555040.6
+  :market_value: 15555040.6
+  :pct_assets: 5.1
+  :yield: 0.1
+:cash:
+  :total_cost: 15619418.45
+  :market_value: 15619418.45
+  :pct_assets: 5.1
+  :yield: 0.1
+:cash_items:
+  :acctfeepay:
+    :code: acctfeepay
+    :name: Accounting Fee Payable
+    :total_cost: -42875.0
+    :market_value: -42875.0
+    :pct_assets: 0.0
+    :yield: 0.0
+  :divacc:
+    :code: divacc
+    :name: Accrued Dividend Income
+    :total_cost: 100310.22
+    :market_value: 100310.22
+    :pct_assets: 0.0
+    :yield: 0.0
+  :adminfeepay:
+    :code: adminfeepay
+    :name: Admin Fee Payable
+    :total_cost: -96558.39
+    :market_value: -96558.39
+    :pct_assets: 0.0
+    :yield: 0.0
+  :cash:
+    :code: cash
+    :name: Cash
+    :total_cost: 15619418.45
+    :market_value: 15619418.45
+    :pct_assets: 5.1
+    :yield: 0.1
+  :custfeepay:
+    :code: custfeepay
+    :name: Custodian Fee Payable
+    :total_cost: -14740.64
+    :market_value: -14740.64
+    :pct_assets: 0.0
+    :yield: 0.0
+  :legalfeepay:
+    :code: legalfeepay
+    :name: Legal Fee Payable
+    :total_cost: -6444.04
+    :market_value: -6444.04
+    :pct_assets: 0.0
+    :yield: 0.0
+  :ticketfeepay:
+    :code: ticketfeepay
+    :name: Ticket Fees Payable
+    :total_cost: -4070.0
+    :market_value: -4070.0
+    :pct_assets: 0.0
+    :yield: 0.0
+:dividends:
+  :total_cost: 100310.22
+  :market_value: 100310.22
+  :pct_assets: 0.0
+  :yield: 0.0
+:total:
+  :total_cost: 239415746.99
+  :market_value: 305276707.76
+  :pct_assets: 100.0
+  :yield: 0.5

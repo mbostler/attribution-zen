@@ -1,0 +1,188 @@
+---
+:transactions:
+- &3
+  :code: in
+  :security: Cash
+  :trade_date: 2015-02-28
+  :settle_date: 2015-02-28
+  :sd_type: caus
+  :sd_symbol: intacc
+  :trade_amount: 3932.79
+  :cusip: 
+  :symbol: cash
+- &4
+  :code: in
+  :security: Cash
+  :trade_date: 2015-02-28
+  :settle_date: 2015-02-28
+  :sd_type: caus
+  :sd_symbol: intacc
+  :trade_amount: 125.84
+  :cusip: 
+  :symbol: cash
+- &5
+  :code: li
+  :security: Cash
+  :trade_date: 2015-03-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 34700.0
+  :cusip: 
+  :symbol: cash
+- &6
+  :code: li
+  :security: Cash
+  :trade_date: 2015-03-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 175000.0
+  :cusip: 
+  :symbol: cash
+- &7
+  :code: li
+  :security: Cash
+  :trade_date: 2015-03-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 700000.0
+  :cusip: 
+  :symbol: cash
+- &8
+  :code: li
+  :security: Cash
+  :trade_date: 2015-03-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 100000.0
+  :cusip: 
+  :symbol: cash
+- &9
+  :code: lo
+  :security: Cash
+  :trade_date: 2015-03-01
+  :settle_date: 
+  :sd_type: awus
+  :sd_symbol: client
+  :trade_amount: 660000.0
+  :cusip: 
+  :symbol: cash
+- &10
+  :code: dp
+  :security: Administrative Fee
+  :trade_date: 2015-03-01
+  :settle_date: 2015-03-01
+  :sd_type: caus
+  :sd_symbol: adminfeepay
+  :trade_amount: 15351.79
+  :cusip: 
+  :symbol: admin
+- &11
+  :code: dp
+  :security: Custodian Fee
+  :trade_date: 2015-03-01
+  :settle_date: 2015-03-01
+  :sd_type: caus
+  :sd_symbol: custfeepay
+  :trade_amount: 2752.36
+  :cusip: 
+  :symbol: cust
+- &12
+  :code: dp
+  :security: Administrative Fee
+  :trade_date: 2015-03-01
+  :settle_date: 2015-03-01
+  :sd_type: caus
+  :sd_symbol: adminfeepay
+  :trade_amount: 1250.0
+  :cusip: 
+  :symbol: admin
+- &13
+  :code: dp
+  :security: Accounting Fee
+  :trade_date: 2015-03-01
+  :settle_date: 2015-03-01
+  :sd_type: caus
+  :sd_symbol: acctfeepay
+  :trade_amount: 3062.5
+  :cusip: 
+  :symbol: acct
+- &14
+  :code: dp
+  :security: Ticket Fees
+  :trade_date: 2015-03-01
+  :settle_date: 2015-03-01
+  :sd_type: caus
+  :sd_symbol: ticketfeepay
+  :trade_amount: 480.0
+  :cusip: 
+  :symbol: ticket
+- &15
+  :code: dp
+  :security: Management Fee
+  :trade_date: 2015-03-01
+  :settle_date: 2015-03-01
+  :sd_type: caus
+  :sd_symbol: manfeepay
+  :trade_amount: 227735.16
+  :cusip: 
+  :symbol: manfee
+- &1
+  :code: by
+  :security: Lumber Liquidators
+  :trade_date: 2015-03-02
+  :settle_date: 2015-03-05
+  :quantity: 38359.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 1508318.07
+  :lot: 551.0
+  :cusip: 55003T107
+  :symbol: LL
+- &2
+  :code: by
+  :security: Bankrate Inc.
+  :trade_date: 2015-03-02
+  :settle_date: 2015-03-05
+  :quantity: 19548.0
+  :close_method: 
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 249581.04
+  :lot: 99.0
+  :cusip: 06647F102
+  :symbol: RATE
+- &16
+  :code: wd
+  :security: Accrued Interest Income
+  :trade_date: 2015-03-02
+  :settle_date: 2015-03-02
+  :sd_type: caus
+  :sd_symbol: cash
+  :trade_amount: 125.84
+  :cusip: 
+  :symbol: intacc
+:stock:
+- *1
+- *2
+:cash:
+- *3
+- *4
+- *5
+- *6
+- *7
+- *8
+- *9
+:divs: []
+:other:
+- *10
+- *11
+- *12
+- *13
+- *14
+- *15
+- *16

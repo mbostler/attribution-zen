@@ -52,6 +52,12 @@ class Attribution::SecurityPerformanceCalculator
     BigDecimal( h.market_value.to_s ) / h.day.total_market_value
   end
   
+  def audit_eop_weight( h )
+    puts "holding market value: #{h.market_value}"
+    puts "day's total market value: #{h.day.total_market_value}"
+    puts "eop weight: #{calc_eop_weight( h )}"
+  end
+  
   def calc_bop_weight( h )
     prev_h = prev_holdings[h.tag]
     num = if !!(prev_h.nil? || prev_h.market_value.nil?)
@@ -68,8 +74,23 @@ class Attribution::SecurityPerformanceCalculator
     perf = Attribution::PerformanceCalculator.calc holdings: [h], 
                                                    prev_holdings: [prev_holdings[h.tag]],
                                                    transactions: transactions_for_holding( h ),
-                                                   treat_as_cash: h.cash_type?
+                                                   treat_as_cash: h.cash_type?,
+                                                   treat_as_intacc: (h.company.tag == "intacc")
     perf
+  end
+  
+  def audit_performance( h )
+    puts "holding: #{h.inspect}"
+    puts "prior holdings: #{prev_holdings[h.tag].inspect}"
+    puts "transactions: #{transactions_for_holding( h ).to_a.inspect}"
+    puts "cash_type?: #{h.cash_type?.inspect}"
+    
+    perf = Attribution::PerformanceCalculator.audit holdings: [h], 
+                                                    prev_holdings: [prev_holdings[h.tag]],
+                                                    transactions: transactions_for_holding( h ),
+                                                    treat_as_cash: h.cash_type?,
+                                                    treat_as_intacc: (h.company.tag == "intacc")
+    
   end
   
   def transactions_for_holding( holding )

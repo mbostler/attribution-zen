@@ -43,6 +43,7 @@ class Attribution::Report
       company = Attribution::Company.find( company_id )
       puts "#{company.tag.ljust(10)} | #{security_days.inspect}"
       cumulative_perf = geo_link security_days.map(&:performance)
+      
       @companies[company][:performance] = cumulative_perf
       @cumulative_security_performances[company.tag] = cumulative_perf
     end
@@ -167,6 +168,16 @@ class Attribution::Report
       audit_portfolio
     else
       audit_security( ticker )
+    end
+  end
+  
+  def audit_security( tag )
+    tag_holdings = days.map do |d| 
+      d.holdings.find { |h| h.company.tag.upcase == tag.upcase }
+    end.compact
+    
+    tag_holdings.each do |h|
+      h.audit
     end
   end
   

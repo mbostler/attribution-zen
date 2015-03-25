@@ -48,6 +48,5 @@ class Attribution::SecurityDay < ActiveRecord::Base
   def cash_item?
     cusip.nil?
   end
-  
-  
+
 end

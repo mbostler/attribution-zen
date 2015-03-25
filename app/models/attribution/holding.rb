@@ -84,4 +84,14 @@ class Attribution::Holding < ActiveRecord::Base
     type_name.upcase == "CASH"
   end
   
+  def audit
+    puts "*** AUDIT FOR #{company.tag} on #{day.date}***"
+    puts "----------------------------------------------"
+    calculator = Attribution::SecurityPerformanceCalculator.new day: day
+    calculator.audit_eop_weight( self )
+    calculator.audit_performance( self )
+    puts "=============================================="
+  end
+  
+  
 end

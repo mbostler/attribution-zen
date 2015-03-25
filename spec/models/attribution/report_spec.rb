@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Attribution::Report, :type => :model do
+  before(:all) { Holiday.reseed! }
   describe 'when calculating reports' do
     before(:each) { @date = Date.civil(2015, 2, 4) }
     
@@ -46,7 +47,7 @@ RSpec.describe Attribution::Report, :type => :model do
       @rep = Attribution::Report.new portfolio: @portfolio, start_date: date, end_date: date
     end
     
-    it 'should correctly calculate for the transactions', focus: true do
+    it 'should correctly calculate for the transactions' do
       @rep.calculate
 
       d = @rep.days.last
@@ -68,6 +69,33 @@ RSpec.describe Attribution::Report, :type => :model do
     end
 
   end
+  
+  describe 'when calculating reports for ginkgo on 3/2/2015' do
+    before( :each ) do
+      @portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
+      
+      date = Date.civil( 2015, 3, 2 )
+      
+      expect_axys_reports "ginkgo", date
+      expect_axys_reports "ginkgo", date.prev_trading_day
+      
+      @rep = Attribution::Report.new portfolio: @portfolio, start_date: date, end_date: date
+    end
+    
+    it 'should correctly calculate for the transactions', focus:true do
+      @rep.calculate
+
+      d = @rep.days.last
+      d.print_holdings d.holdings
+    
+      @rep.audit
+      @rep.audit( "PCRX" )
+
+      expect( '%0.8f' % @rep.cumulative_security_performances["intacc"] ).to eq("1.00000000")
+    end
+
+  end
+  
     
   describe 'when calculating reports for ginkgo on 10/4/2013' do
     before( :each ) do
@@ -140,12 +168,12 @@ def attribs_to_holdings( holdings_attribs )
 end
 
 def expect_axys_reports( portfolio_name, date )
-  txns_file = File.join( Rails.root, "spec/data/ginkgo_transactions_#{date.strftime('%Y_%m_%-d')}.yaml" )
+  txns_file = File.join( Rails.root, "spec/data/ginkgo_transactions_#{date.strftime('%Y_%-m_%-d')}.yaml" )
   raise "couldn't find transactions file at #{txns_file}" unless File.exists?(txns_file)
   txns = YAML.load File.read(  txns_file )
-  expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: portfolio_name, start: date, end: date ).and_return( txns )
+  expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: portfolio_name, start: date.prev_trading_day+1, end: date ).and_return( txns )
 
-  holdings_file = File.join( Rails.root, "spec/data/ginkgo_holdings_#{date.strftime('%Y_%m_%-d')}.yaml")
+  holdings_file = File.join( Rails.root, "spec/data/ginkgo_holdings_#{date.strftime('%Y_%-m_%-d')}.yaml")
   raise "couldn't find holdings file at #{holdings_file}" unless File.exists?(holdings_file)
   attribs = YAML.load File.read( holdings_file )
   expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: portfolio_name, start: date).and_return( attribs )
