@@ -29,3 +29,4 @@ end
 require 'csv'
 require 'dotenv'
 Dotenv.load
+require 'zip'

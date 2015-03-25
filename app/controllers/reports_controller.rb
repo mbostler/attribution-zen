@@ -19,11 +19,26 @@ class ReportsController < ApplicationController
   
   # GET /reports/generate
   def generate
-    day = Attribution::Day.where( :date => Date.yesterday ).first_or_create
-    data_file = Attribution::DataFile.new( day )
-    data_file.create
-    ReportMailer.report_email( data_file: data_file ).deliver_now
-    FileUtils.rm( data_file.path ) if File.exists?( data_file.path )
+    portfolio_names = ["ginkgo", "bodhi"]
+    date = Date.yesterday
+    FileUtils.rm_rf Attribution::DataFile::BKP_DIR
+    file_names = portfolio_names.map do |name|
+      portfolio = Attribution::Portfolio.where( name: name ).first_or_create
+      day = Attribution::Day.where( date: date, portfolio_id: portfolio.id ).first_or_create
+      data_file = Attribution::DataFile.new( day )
+      data_file.create
+      data_file.path
+    end
+    
+    zip_filename = "Attribution Reports - #{date.strftime('%-m-%-d-%Y')}.zip"
+    Zip::File.open( zip_filename, Zip::File::CREATE ) do |zipfile|
+      file_names.each do |fn|
+        zipfile.add( File.basename(fn), fn )
+      end
+    end
+    
+    ReportMailer.report_email( zip_file: zip_filename ).deliver_now
+    FileUtils.rm( zip_filename ) if File.exists?( zip_filename )
     # send_file data_file.path
     redirect_to reports_path, notice: 'Report was successfully generated.'
   end

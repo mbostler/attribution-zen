@@ -3,10 +3,12 @@ class ReportMailer < ApplicationMailer
   
   def report_email( opts )
     @data_file = opts[:data_file]
+    @zip_file = opts[:zip_file]
     recipients = opts[:recipients] || DEFAULT_RECIPIENTS
-    subject = "Attribution Report#{@data_file ? ' (with actual report)' : ''}"
+    zip_basename = File.basename( @zip_file )
+    subject = "Attribution Report#{@zip_file ? ": #{zip_basename}" : ''}"
     
-    attachments[@data_file.filename] = File.read( @data_file.path )
+    attachments[zip_basename] = File.read( @zip_file )
     mail to: recipients, subject: subject
   end
 end

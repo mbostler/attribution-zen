@@ -3,9 +3,12 @@ class Attribution::DataFile
     cusip: "CUSIP",
     symbol: "SYMBOL"
   }
+  
+  BKP_DIR = File.join Rails.root, "tmp", "Daily Performance Files"
+  
   def initialize( day )
     raise( ArgumentError, "must pass an Attribution::Day" ) unless day.is_a?( Attribution::Day )
-    portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
+    portfolio = day.portfolio
     @aggregator = Attribution::DataAggregator.new :date => day.date, :portfolio => portfolio
   end
   
@@ -50,11 +53,13 @@ class Attribution::DataFile
   alias_method :path, :output_filepath
   
   def bkp_dir
-    File.join Rails.root, "tmp", "Daily Performance Files"
+    BKP_DIR
   end
   
   def filename
-    "Daily Performance File.csv"
+    portfolio_name = @aggregator.portfolio.name.delete "+&@"
+    date = @aggregator.date
+    "#{portfolio_name} Daily Performance File - #{date.strftime('%-m-%-d-%Y')}.csv"
   end
   
   def path

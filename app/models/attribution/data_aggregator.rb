@@ -5,7 +5,9 @@ class Attribution::DataAggregator
     :today => "Today",
     :wtd => "WTD",
     :mtd => "MTD",
-    :ytd => "YTD"
+    :ytd => "YTD",
+    :ltm => "LTM",
+    :since_inception => "Since Inception"
   }
   
   def initialize( opts={} )
@@ -33,8 +35,8 @@ class Attribution::DataAggregator
     {
       symbol: company.tag,
       cusip: company.cusip,
-      "#{meth_prefix.to_s}_performance".to_sym => report_stats[:performance],
-      "#{meth_prefix.to_s}_contribution".to_sym => report_stats[:contribution]
+      "#{meth_prefix.to_s}_performance".to_sym => percentagize(report_stats[:performance]-1),
+      "#{meth_prefix.to_s}_contribution".to_sym => percentagize(report_stats[:contribution])
     }
   end
   
@@ -57,6 +59,23 @@ class Attribution::DataAggregator
   end
 
   def ytd_start_date
-    Date.civil( @date.year, 1, 1 )
+    # TODO: fix
+    # Date.civil( @date.year, 1, 1 )
+    Date.civil( @date.year, @date.month, 1 )
+  end
+  
+  def ltm_start_date
+    # TODO: implement
+    Date.civil( @date.year, @date.month, 1 )    
+  end
+  
+  def since_inception_start_date
+    # TODO: implement
+    Date.civil( @date.year, @date.month, 1 )    
+  end
+  
+  def percentagize(num)
+    return '' if num.blank?
+    '%0.3f' % (num*100)
   end
 end
