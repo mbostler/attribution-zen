@@ -84,6 +84,10 @@ class Attribution::Holding < ActiveRecord::Base
     type_name.upcase == "CASH"
   end
   
+  def intacc?
+    company.tag == "intacc"
+  end
+
   def audit
     puts "*** AUDIT FOR #{company.tag} on #{day.date}***"
     puts "----------------------------------------------"
@@ -91,6 +95,10 @@ class Attribution::Holding < ActiveRecord::Base
     calculator.audit_eop_weight( self )
     calculator.audit_performance( self )
     puts "=============================================="
+  end
+  
+  def sd_on( day )
+    Attribution::SecurityDay.where( day_id: day.id, company_id: self.company.id ).first
   end
   
   

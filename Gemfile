@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-source 'http://darmoxy2:8808' do
+source 'http://daamg1-vwmoxy2.darumanyc.com:8808' do
   ### AXYS ###
-  gem 'axys', '>= 0.3.2'
+  gem 'axys', '>= 0.3.3'
   ### AXYS ###
 end
 

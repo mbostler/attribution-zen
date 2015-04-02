@@ -60,8 +60,8 @@ class Attribution::DataAggregator
 
   def ytd_start_date
     # TODO: fix
-    # Date.civil( @date.year, 1, 1 )
-    Date.civil( @date.year, @date.month, 1 )
+    Date.civil( @date.year, 1, 1 )
+    # Date.civil( @date.year, @date.month, 1 )
   end
   
   def ltm_start_date

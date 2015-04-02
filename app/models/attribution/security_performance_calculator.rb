@@ -75,7 +75,7 @@ class Attribution::SecurityPerformanceCalculator
                                                    prev_holdings: [prev_holdings[h.tag]],
                                                    transactions: transactions_for_holding( h ),
                                                    treat_as_cash: h.cash_type?,
-                                                   treat_as_intacc: (h.company.tag == "intacc")
+                                                   treat_as_intacc: h.intacc?
     perf
   end
   

@@ -3,13 +3,11 @@
 # Table name: attribution_security_days
 #
 #  id           :integer          not null, primary key
-#  cusip        :string
 #  weight       :float
 #  performance  :float
 #  contribution :float
 #  company_id   :integer
 #  day_id       :integer
-#  portfolio_id :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

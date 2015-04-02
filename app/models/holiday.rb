@@ -15,7 +15,10 @@ class Holiday < ActiveRecord::Base
 	validates :month, :presence => true
 
 	def self.on?( date )
-		!!Holiday.where( "day=? AND month=? AND ( year IS NULL OR year=? )", date.day, date.month, date.year ).first
+    # !!Holiday.where( "day=? AND month=? AND ( year IS NULL OR year=? )", date.day, date.month, date.year ).first
+    $holidays ||= Holiday.all
+    holiday = $holidays.find { |h| h.year == date.year && h.month == date.month && h.day == date.day }
+    !!holiday
 	end
 
 	def self.reseed!

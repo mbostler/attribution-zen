@@ -19,7 +19,8 @@ class ReportsController < ApplicationController
   
   # GET /reports/generate
   def generate
-    portfolio_names = ["ginkgo", "bodhi"]
+    # portfolio_names = ["ginkgo", "bodhi"]
+    portfolio_names = ["ginkgo"]
     date = Date.yesterday
     FileUtils.rm_rf Attribution::DataFile::BKP_DIR
     file_names = portfolio_names.map do |name|

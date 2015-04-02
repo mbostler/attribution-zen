@@ -156,7 +156,7 @@ class Attribution::Report
   end
   
   def contribution_addend( security_day )
-    security_day.contribution * pv_multiplier( security_day )
+    (security_day.contribution || 0) * pv_multiplier( security_day )
   end
   
   def security_results
@@ -219,7 +219,7 @@ class Attribution::Report
   #
   # NOTE: this assumes it takes depercentagized numbers!
   def geo_link( nums )
-    nums.inject( BigDecimal("1.0") ) { |product, factor| product *= factor }
+    nums.compact.inject( BigDecimal("1.0") ) { |product, factor| product *= factor }
   end
 
   # "normalize" with respect to what is right mathematically

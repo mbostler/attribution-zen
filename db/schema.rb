@@ -85,13 +85,11 @@ ActiveRecord::Schema.define(version: 20150324155558) do
   end
 
   create_table "attribution_security_days", force: :cascade do |t|
-    t.string   "cusip"
     t.float    "weight"
     t.float    "performance"
     t.float    "contribution"
     t.integer  "company_id"
     t.integer  "day_id"
-    t.integer  "portfolio_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end

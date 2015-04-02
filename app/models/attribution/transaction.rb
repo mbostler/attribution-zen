@@ -30,4 +30,5 @@ class Attribution::Transaction < ActiveRecord::Base
   scope :los, -> { where( code: "lo" ) }
   scope :ins, -> { where( code: "in" ) }
   scope :wds, -> { where( code: "wd" ) }
+  scope :dvs, -> { where( code: "dv" ) }
 end
