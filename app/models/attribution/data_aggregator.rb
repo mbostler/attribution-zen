@@ -19,6 +19,7 @@ class Attribution::DataAggregator
   def create_reports
     TIME_FRAMES.each do |meth_prefix, title|
       start_date = calc_start_date( meth_prefix )
+      puts "value of start_date is: #{start_date.inspect}"
       report = Attribution::Report.new :portfolio => @portfolio, :start_date => start_date, :end_date => @date
       report.calculate
       report.companies.each do |company, report_stats|
@@ -41,6 +42,7 @@ class Attribution::DataAggregator
   end
   
   def calc_start_date( prefix )
+    puts "value of prefix is: #{prefix.inspect}"
     send "#{prefix.to_s}_start_date"
   end
   

@@ -1,9 +1,13 @@
 source 'https://rubygems.org'
+<<<<<<< Updated upstream
 source 'http://daamg1-vwmoxy2.darumanyc.com:8808' do
+=======
+# source 'http://darmoxy2:8808' do
+>>>>>>> Stashed changes
   ### AXYS ###
   gem 'axys', '>= 0.3.3'
   ### AXYS ###
-end
+# end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'

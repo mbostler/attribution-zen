@@ -1,5 +1,5 @@
 Given(/^a performance day for a portfolio$/) do
-  @day = Attribution::Day.new
+  @day = Attribution::Day.new :date => Date.today
 end
 
 When(/^I create the data file for that performance day$/) do

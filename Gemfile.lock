@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
+<<<<<<< Updated upstream
   remote: http://daamg1-vwmoxy2.darumanyc.com:8808/
+=======
+>>>>>>> Stashed changes
   specs:
     actionmailer (4.2.0)
       actionpack (= 4.2.0)
@@ -285,7 +288,11 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+<<<<<<< Updated upstream
   axys (>= 0.3.3)!
+=======
+  axys (>= 0.3.2)
+>>>>>>> Stashed changes
   byebug
   capistrano-bundler (>= 1.1.0)
   capistrano-rails

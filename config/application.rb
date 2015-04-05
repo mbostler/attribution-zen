@@ -2,6 +2,21 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+module Axys
+  module Remote
+    # REQUEST_SEPERATOR = "&&END&&"
+    #
+    # DEFAULT_PORT = 3911
+    #
+    # DEFAULT_HOST = "darmoxy2.darumanyc.com"
+    # DEFAULT_HOST_IP = Resolv.getaddress DEFAULT_HOST
+    DEFAULT_HOST_IP = "DUMMY"
+    
+    # LOCAL_HOST = "localhost"
+    # LOCAL_HOST_IP = Resolv.getaddress LOCAL_HOST
+  end
+end
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

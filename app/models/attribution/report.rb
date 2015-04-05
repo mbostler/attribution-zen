@@ -11,12 +11,21 @@ class Attribution::Report
   end
   
   def calculate
+    ensure_inputs_are_set!
     ensure_days_are_completely_downloaded
     ensure_security_days_are_completely_calculated
     calculate_cumulative_security_performances
     calculate_cumulative_portfolio_performance
     calculate_cumulative_security_contributions
     @results = { :security => security_stats }
+  end
+  
+  def ensure_inputs_are_set!
+    [:start_date, :end_date, :portfolio].each do |attrib|
+      if self.send(attrib).blank?
+        raise "#{attrib} was not set! Cannot calculate."
+      end
+    end
   end
   
   def ensure_security_days_are_completely_calculated
