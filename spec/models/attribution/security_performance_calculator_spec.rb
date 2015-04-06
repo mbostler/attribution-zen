@@ -8,26 +8,30 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
     expect( calculator.day.date ).to eq( d )
   end
   
-  describe 'calculating perfomrance for securities' do
+  describe 'calculating performance for securities' do
     it 'correctly calculates when zero transactions' do
       calculator = Attribution::SecurityPerformanceCalculator.new
       
       d0 = Date.civil( 2015, 2, 18 )
       d1 = d0 + 1
       
-      day1 = Attribution::Day.create! :date => d1
-      day0 = Attribution::Day.create! :date => d0
+      type = Attribution::HoldingType.where( name: Attribution::HoldingType::SECURITY_NAME ).first_or_create
+      
+      portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
+      
+      day1 = Attribution::Day.create! date: d1, portfolio_id: portfolio.id
+      day0 = Attribution::Day.create! date: d0, portfolio_id: portfolio.id
       
       attribs1 = [
-        { market_value:  40, cusip: "1", ticker: "A", day_id: day1.id },
-        { market_value:  50, cusip: "2", ticker: "B", day_id: day1.id },
-        { market_value: 110, cusip: "3", ticker: "C", day_id: day1.id }
+        { market_value:  40, cusip: "1", ticker: "A", day_id: day1.id, type_id: type.id },
+        { market_value:  50, cusip: "2", ticker: "B", day_id: day1.id, type_id: type.id },
+        { market_value: 110, cusip: "3", ticker: "C", day_id: day1.id, type_id: type.id }
       ]
 
       attribs0 = [
-        { market_value:  25, cusip: "1", ticker: "A", day_id: day0.id },
-        { market_value:  50, cusip: "2", ticker: "B", day_id: day0.id },
-        { market_value: 125, cusip: "3", ticker: "C", day_id: day0.id }
+        { market_value:  25, cusip: "1", ticker: "A", day_id: day0.id, type_id: type.id },
+        { market_value:  50, cusip: "2", ticker: "B", day_id: day0.id, type_id: type.id },
+        { market_value: 125, cusip: "3", ticker: "C", day_id: day0.id, type_id: type.id }
       ]
       
       holdings1 = attribs_to_holdings( attribs1 )
@@ -35,23 +39,25 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
       
       
       allow( day1 ).to receive( :holdings ).and_return( holdings1 )
-      allow( day1 ).to receive( :transactions ).and_return( [] )
+      allow( day1 ).to receive( :transactions ).and_return( Attribution::Transaction.none )
       
-      allow( day0 ).to receive( :prev_holdings ).and_return( holdings0 )
-      allow( day0 ).to receive( :prev_transactions ).and_return( [] )
+      allow( day1 ).to receive( :prev_holdings ).and_return( holdings0 )
+      allow( day1 ).to receive( :prev_transactions ).and_return( Attribution::Transaction.none )
       
       allow_any_instance_of( Attribution::Day ).to receive( :ensure_download ).and_return( true )
       
       calculator.day = day1
-      cusip_mapped_holdings0 = holdings0.inject({}) do |hsh, holding|
-        hsh[holding.cusip] = holding
+      tag_mapped_holdings0 = holdings0.inject({}) do |hsh, holding|
+        hsh[holding.tag] = holding
         hsh
       end
-      allow( calculator ).to receive( :prev_holdings ).and_return( cusip_mapped_holdings0 )
+      allow( calculator ).to receive( :prev_holdings ).and_return( tag_mapped_holdings0 )
       calculator.calculate
       results = calculator.results
       
       expect( calculator.day.prev_day.total_market_value ).to eq( 200 )
+      
+      calculator.audit_performance( holdings1.first )
 
       expect( results.values.first.tag ).to eq( "A" )
       expect( results["A"].class ).to eq( Attribution::SecurityDay )
@@ -73,6 +79,8 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
     it 'should create security_days that are actually linked to the day' do
       calculator = Attribution::SecurityPerformanceCalculator.new
 
+      type = Attribution::HoldingType.where( name: Attribution::HoldingType::SECURITY_NAME ).first_or_create
+
       d0 = Date.civil( 2015, 2, 18 )
       d1 = d0 + 1
 
@@ -80,25 +88,25 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
       day0 = Attribution::Day.create! :date => d0
 
       attribs1 = [
-        { market_value:  40, cusip: "1", ticker: "A", day_id: day1.id },
-        { market_value:  50, cusip: "2", ticker: "B", day_id: day1.id },
-        { market_value: 110, cusip: "3", ticker: "C", day_id: day1.id }
+        { market_value:  40, cusip: "1", ticker: "A", day_id: day1.id, type_id: type.id },
+        { market_value:  50, cusip: "2", ticker: "B", day_id: day1.id, type_id: type.id },
+        { market_value: 110, cusip: "3", ticker: "C", day_id: day1.id, type_id: type.id }
       ]
 
       attribs0 = [
-        { market_value:  25, cusip: "1", ticker: "A", day_id: day0.id },
-        { market_value:  50, cusip: "2", ticker: "B", day_id: day0.id },
-        { market_value: 125, cusip: "3", ticker: "C", day_id: day0.id }
+        { market_value:  25, cusip: "1", ticker: "A", day_id: day0.id, type_id: type.id },
+        { market_value:  50, cusip: "2", ticker: "B", day_id: day0.id, type_id: type.id },
+        { market_value: 125, cusip: "3", ticker: "C", day_id: day0.id, type_id: type.id }
       ]
       
       holdings1 = attribs_to_holdings( attribs1 )
       holdings0 = attribs_to_holdings( attribs0 )
 
       allow( day1 ).to receive( :holdings ).and_return( holdings1 )
-      allow( day1 ).to receive( :transactions ).and_return( [] )
+      allow( day1 ).to receive( :transactions ).and_return( Attribution::Transaction.none )
 
       allow( day0 ).to receive( :prev_holdings ).and_return( holdings0 )
-      allow( day0 ).to receive( :prev_transactions ).and_return( [] )
+      allow( day0 ).to receive( :prev_transactions ).and_return( Attribution::Transaction.none )
 
       allow_any_instance_of( Attribution::Day ).to receive( :ensure_download ).and_return( true )
 
@@ -118,20 +126,26 @@ RSpec.describe Attribution::SecurityPerformanceCalculator, :type => :model do
       @portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
     
       date = Date.civil 2013, 10, 3
-      txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_3.yaml"))
-      expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+      expect_axys_reports "ginkgo", date
+
+      # date = Date.civil 2013, 10, 3
+      # txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_3.yaml"))
+      # expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+      #
+      # date = Date.civil 2013, 10, 3
+      # attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_3.yaml"))
+      # expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
 
       date = Date.civil 2013, 10, 4
-      txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_4.yaml"))
-      expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+      expect_axys_reports "ginkgo", date
 
-      date = Date.civil 2013, 10, 3
-      attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_3.yaml"))
-      expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
-
-      date = Date.civil 2013, 10, 4
-      attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_4.yaml"))
-      expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
+      # date = Date.civil 2013, 10, 4
+      # txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_4.yaml"))
+      # expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+      #
+      # date = Date.civil 2013, 10, 4
+      # attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_4.yaml"))
+      # expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
 
       @rep = Attribution::Report.new portfolio: @portfolio, start_date: date, end_date: date
       

@@ -82,14 +82,14 @@ RSpec.describe Attribution::Report, :type => :model do
       @rep = Attribution::Report.new portfolio: @portfolio, start_date: date, end_date: date
     end
     
-    it 'should correctly calculate for the transactions', focus:true do
+    it 'should correctly calculate for the transactions' do
       @rep.calculate
 
       d = @rep.days.last
       d.print_holdings d.holdings
     
       @rep.audit
-      @rep.audit( "PCRX" )
+      @rep.audit( "intacc" )
 
       expect( '%0.8f' % @rep.cumulative_security_performances["intacc"] ).to eq("1.00000000")
     end
@@ -102,20 +102,10 @@ RSpec.describe Attribution::Report, :type => :model do
       @portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
       
       date = Date.civil 2013, 10, 3
-      txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_3.yaml"))
-      expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
+      expect_axys_reports "ginkgo", date
 
       date = Date.civil 2013, 10, 4
-      txns = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_transactions_2013_10_4.yaml"))
-      expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date, end: date ).and_return( txns )
-
-      date = Date.civil 2013, 10, 3
-      attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_3.yaml"))
-      expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
-
-      date = Date.civil 2013, 10, 4
-      attribs = YAML.load File.read( File.join( Rails.root, "spec/data/ginkgo_holdings_2013_10_4.yaml"))
-      expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: "ginkgo", start: date).and_return( attribs )
+      expect_axys_reports "ginkgo", date
 
       @rep = Attribution::Report.new portfolio: @portfolio, start_date: date, end_date: date
     end
@@ -134,14 +124,11 @@ RSpec.describe Attribution::Report, :type => :model do
       companies = Attribution::Company.where( code_id: hc.id ).all
       expect( companies.size ).to eq( 1 )
       sds = Attribution::SecurityDay.all
-      # sds.each do |sd|
-      #   puts "#{sd.tag.ljust(15)} - #{sd.inspect}"
-      # end
       c = companies.first
       expect( c.security_days.size ).to eq( 1 )
     end
 
-    it 'should properly calculate cumulative performances ' do
+    it 'should properly calculate cumulative performances' do
       @rep.calculate
 
       d = @rep.days.last
@@ -158,6 +145,50 @@ RSpec.describe Attribution::Report, :type => :model do
       expect( '%0.8f' % @rep.cumulative_portfolio_performance ).to eq("1.00662278")
     end
     
+  end
+  
+  describe 'when calculating for +&smcomp' do
+    it 'should calculate redpay performance correctly  on 4/1/2015' do
+      date = Date.civil(2015, 4, 1)
+      portfolio = Attribution::Portfolio.where( name: "+&smcomp" ).first_or_create
+      day = portfolio.days.where( date: date ).first_or_create
+      day.refresh!
+      day.sd("redpay").audit
+      expect( day.sd("redpay").performance ).to eq( 1.0 )
+    end
+    
+    it 'should calculate intacc performance correctly on 3/31/2015' do
+      date = Date.civil(2015, 3, 31)
+      portfolio = Attribution::Portfolio.where( name: "+&smcomp" ).first_or_create
+      day = portfolio.days.where( date: date ).first_or_create
+      day.refresh!
+      day.sd("intacc").audit
+      expect( '%0.8f' % day.sd("intacc").performance ).to eq("1.00000000")      
+    end
+    
+    it 'should calculate the MTD for March 2015', focus: true do
+      d0 = Date.civil(2015, 3, 1)
+      d1 = Date.civil(2015, 3, 31)
+      
+      portfolio = Attribution::Portfolio.where( name: "+&smcomp" ).first_or_create
+      report = Attribution::Report.new :start_date => d0, :end_date => d1, :portfolio => portfolio
+      
+      report.calculate
+      
+      expect( report.cumulative_portfolio_performance ).to eq( 1.4 )
+    end
+    
+    it 'should calculate the YTD thru March 2015', focus: true do
+      d0 = Date.civil(2015, 1, 1)
+      d1 = Date.civil(2015, 3, 31)
+      
+      portfolio = Attribution::Portfolio.where( name: "+&smcomp" ).first_or_create
+      report = Attribution::Report.new :start_date => d0, :end_date => d1, :portfolio => portfolio
+      
+      report.calculate
+      
+      expect( report.cumulative_portfolio_performance ).to eq( 1.4 )
+    end
   end
 end
 

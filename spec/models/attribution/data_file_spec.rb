@@ -10,17 +10,21 @@ RSpec.describe Attribution::DataFile, :type => :model do
 
   describe 'on create' do
     it 'should be able to create a data file, returning path to file' do
-      d = Attribution::Day.new
+      portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
+      d = Attribution::Day.new portfolio_id: portfolio.id, date: Date.today
       df = Attribution::DataFile.new( d )
+      allow_any_instance_of( Attribution::DataAggregator ).to receive( :create_reports ).and_return( true )
       df.create
       expect( File.exists?( df.path ) ).to eq(true)
     end
     
     it "should create a header" do
-      d = Attribution::Day.new
+      portfolio = Attribution::Portfolio.where( name: "ginkgo" ).first_or_create
+      d = Attribution::Day.new portfolio_id: portfolio.id, date: Date.today
       df = Attribution::DataFile.new( d )
+      allow_any_instance_of( Attribution::DataAggregator ).to receive( :create_reports ).and_return( true )
       
-      expect( df ).to receive( :create_header )
+      expect( df ).to receive( :write_header )
       df.create
     end
   end

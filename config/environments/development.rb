@@ -53,4 +53,5 @@ Rails.application.configure do
   #   sender_address: %{"AttributionZen" <noreply@darumanyc.com>},
   #   exception_recipients: %w(mjbostler@darumanyc.com)
   # }
+  $RUN_AXYS_LOCALLY = true
 end

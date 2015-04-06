@@ -15,7 +15,6 @@ class Attribution::PerformanceCalculator
     @transactions = opts[:transactions]
     @treat_as_cash = opts[:treat_as_cash]
     @treat_as_total = opts[:treat_as_total]
-    @treat_as_intacc = opts[:treat_as_intacc]
   end
 
   def calculate
@@ -26,7 +25,6 @@ class Attribution::PerformanceCalculator
     t = sales + los - purchases - lis - ins + wds
     t += (emv - bmv) if holding_type?( "divacc", "redpay" )
     t *= -1 if @treat_as_cash
-    t -= ins if @treat_as_intacc
     t
   end
   
@@ -35,16 +33,16 @@ class Attribution::PerformanceCalculator
   end
   
   def denom
-    bmv.zero? ? (purchases + lis + ins) : bmv
+    bmv.zero? ? (purchases + lis + ins - wds - los) : bmv
   end
   
   def num
     if bmv.zero?
-      if @treat_as_cash
-        BigDecimal(emv.to_s) + txns
-      else
+      # if @treat_as_cash
+      #   BigDecimal(emv.to_s) + txns
+      # else
         BigDecimal(emv.to_s)
-      end
+      # end
     else
       BigDecimal(emv.to_s) + txns + dvs
     end
@@ -53,7 +51,6 @@ class Attribution::PerformanceCalculator
   def audit
     puts "value of @treat_as_cash is: #{@treat_as_cash.inspect}"
     puts "value of @treat_as_total is: #{@treat_as_total.inspect}"
-    puts "value of @treat_as_intacc is: #{@treat_as_intacc.inspect}"
     [:sales, :purchases, :lis, :ins, :wds, :los, :emv, :bmv, :txns, :dvs, :num, :denom, :calculate].each do |stat|
       puts "\t#{stat.to_s}: #{send(stat)}"
     end
@@ -90,7 +87,7 @@ class Attribution::PerformanceCalculator
   end
   
   def los
-    @transactions.lis.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }    
+    @transactions.los.inject( BigDecimal( "0.0") ) { |s, txn| s += txn.trade_amount }    
   end
   
   def emv

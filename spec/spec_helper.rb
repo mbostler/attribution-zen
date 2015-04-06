@@ -85,3 +85,15 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+def expect_axys_reports( portfolio_name, date )
+  txns_file = AxysDataStore.transactions_output_path( portfolio_name, date )
+  raise "couldn't find transactions file at #{txns_file}" unless File.exists?(txns_file)
+  txns = YAML.load File.read(  txns_file )
+  expect( Axys::TransactionsWithSecuritiesReport ).to receive( :run! ).with( portfolio_name: portfolio_name, start: date.prev_trading_day+1, end: date ).and_return( txns )
+
+  holdings_file = AxysDataStore.holdings_output_path( portfolio_name, date )
+  raise "couldn't find holdings file at #{holdings_file}" unless File.exists?(holdings_file)
+  attribs = YAML.load File.read( holdings_file )
+  expect( Axys::AppraisalWithTickerAndCusipReport ).to receive( :run! ).with( portfolio_name: portfolio_name, start: date).and_return( attribs )
+end

@@ -71,7 +71,7 @@ module Attribution
       holdings.destroy_all
       transactions.destroy_all
       security_days.destroy_all
-      portfolio_day.destroy
+      portfolio_day.destroy if portfolio_day
       download
       compute_security_days
     end
@@ -122,14 +122,17 @@ module Attribution
       rep = Axys::TransactionsWithSecuritiesReport.run! portfolio_name: portfolio.name, start: start_date, end: self.date
       
       rep[:transactions].each do |transaction|
-        intacc_code = "intacc"
-        company = if transaction[:sd_symbol] == intacc_code || transaction[:symbol] == intacc_code
-          hc = Attribution::HoldingCode.where( name: intacc_code ).first_or_create
+        # intacc_code = "intacc"
+        # company = if transaction[:sd_symbol] == intacc_code || transaction[:symbol] == intacc_code
+        company = if transaction[:cusip].blank?
+          code_name = transaction[:sd_symbol].downcase.strip == "client" ? transaction[:symbol] : transaction[:sd_symbol]
+          hc = Attribution::HoldingCode.where( name: code_name ).first_or_create
           Attribution::Company.where( code_id: hc.id ).first_or_create
         else
           Attribution::Company.where( ticker: transaction[:symbol], cusip: transaction[:cusip] ).first_or_create
         end
-        transactions.create! transaction.merge( company_id: company.id )
+        txn = transactions.create! transaction.merge( company_id: company.id )
+        txn
       end
     end
     
@@ -183,6 +186,10 @@ module Attribution
         puts [txn.company_id, txn.code, txn.symbol, txn.trade_amount, txn.sd_symbol, txn.trade_date].inspect
       end
       true
+    end
+    
+    def sd(tag)
+      self.security_days.find { |sd| sd.tag == tag }
     end
     
   end

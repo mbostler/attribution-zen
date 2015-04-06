@@ -31,7 +31,6 @@ class Attribution::DataFile
     end.flatten
     
     keys = FIELDS.keys + perf_keys
-    puts "company is : " + company.inspect
     company_values = keys.map { |k| company[k] }
     csv << company_values
   end

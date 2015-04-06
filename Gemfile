@@ -1,12 +1,11 @@
 source 'https://rubygems.org'
-<<<<<<< Updated upstream
-source 'http://daamg1-vwmoxy2.darumanyc.com:8808' do
-=======
-# source 'http://darmoxy2:8808' do
->>>>>>> Stashed changes
-  ### AXYS ###
-  gem 'axys', '>= 0.3.3'
-  ### AXYS ###
+# source 'http://daamg1-vwmoxy2.darumanyc.com:8808' do
+# # source 'http://darmoxy2:8808' do
+#   ### AXYS ###
+# gem 'axys', '>= 0.3.3'
+# TODO: update axys gem version!
+gem 'axys', '>= 0.3.2'
+#   ### AXYS ###
 # end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

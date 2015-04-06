@@ -13,12 +13,11 @@ class Attribution::SecurityPerformanceCalculator
       contribution = calc_bop_weight( h ) * (performance-1)      
       
       h.associate_company if h.company_id.blank?
-      sd = Attribution::SecurityDay.create!(
+      sd = day.security_days.create!(
         weight: eop_weight, 
         performance: performance,
         contribution: contribution,
-        company_id: h.company_id,
-        day_id: day.id
+        company_id: h.company_id
       )
       sd
     end
@@ -74,8 +73,7 @@ class Attribution::SecurityPerformanceCalculator
     perf = Attribution::PerformanceCalculator.calc holdings: [h], 
                                                    prev_holdings: [prev_holdings[h.tag]],
                                                    transactions: transactions_for_holding( h ),
-                                                   treat_as_cash: h.cash_type?,
-                                                   treat_as_intacc: h.intacc?
+                                                   treat_as_cash: h.cash_type?
     perf
   end
   
@@ -85,11 +83,10 @@ class Attribution::SecurityPerformanceCalculator
     puts "transactions: #{transactions_for_holding( h ).to_a.inspect}"
     puts "cash_type?: #{h.cash_type?.inspect}"
     
-    perf = Attribution::PerformanceCalculator.audit holdings: [h], 
+    perf = Attribution::PerformanceCalculator.audit holdings: [h],
                                                     prev_holdings: [prev_holdings[h.tag]],
                                                     transactions: transactions_for_holding( h ),
-                                                    treat_as_cash: h.cash_type?,
-                                                    treat_as_intacc: (h.company.tag == "intacc")
+                                                    treat_as_cash: h.cash_type?
     
   end
   

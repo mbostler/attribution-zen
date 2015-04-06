@@ -135,7 +135,7 @@ RSpec.describe Attribution::Day, :type => :model do
       day.download
       expect( day.transactions.size ).to eq 1
       expect( day.holdings.size ).to eq 38
-      expect( day.completed? ).to eq( true )
+      expect( day.downloaded? ).to eq( true )
     end
     
     it 'should raise an error if there is no associated portfolio name or date' do

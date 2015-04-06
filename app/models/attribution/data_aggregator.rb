@@ -3,11 +3,11 @@ class Attribution::DataAggregator
   
   TIME_FRAMES = {
     :today => "Today",
-    :wtd => "WTD",
-    :mtd => "MTD",
-    :ytd => "YTD",
-    :ltm => "LTM",
-    :since_inception => "Since Inception"
+    :wtd => "WTD"#,
+    # :mtd => "MTD",
+    # :ytd => "YTD",
+    # :ltm => "LTM",
+    # :since_inception => "Since Inception"
   }
   
   def initialize( opts={} )

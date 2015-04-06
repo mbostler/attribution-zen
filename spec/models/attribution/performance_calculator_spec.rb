@@ -13,7 +13,7 @@ RSpec.describe Attribution::PerformanceCalculator, :type => :model do
     calculator = Attribution::PerformanceCalculator.new( 
       :holdings => attribs_to_holdings(todays_holdings),
       :prev_holdings => attribs_to_holdings(yesterdays_holdings),
-      :transactions => [])
+      :transactions => Attribution::Transaction.none)
       
     result = calculator.calculate
     
