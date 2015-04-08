@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
-# source 'http://daamg1-vwmoxy2.darumanyc.com:8808' do
+source 'http://daamg1-vwmoxy2.darumanyc.com:8808' do
 # # source 'http://darmoxy2:8808' do
 #   ### AXYS ###
-# gem 'axys', '>= 0.3.3'
+  gem 'axys', '>= 0.3.3'
 # TODO: update axys gem version!
-gem 'axys', '>= 0.3.2'
+# gem 'axys', '>= 0.3.2'
 #   ### AXYS ###
-# end
+end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
@@ -71,6 +71,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
   gem 'rvm-capistrano'
+  gem 'ruby-prof'
 end
 
 group :test do
