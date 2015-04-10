@@ -68,10 +68,28 @@ class Attribution::Report
   end
   
   def calculate_cumulative_security_contributions
+    @contribs = {}
     multipliers = cumulative_contribution_multipliers
-    raise "STOP"
     addends = daily_security_contribution_addends
     
+    addends.each do |company_id, perfs|
+
+      puts "#{company_id} perfs size is: #{perfs.size}"
+      contrib_parts = perfs.size.times.map do |i|
+        perfs[i] * multipliers[i]
+      end
+      
+      summed_contrib = contrib_parts.inject( 0.0 ) { |s, x| s += x }
+      
+      @contribs[company_id] = summed_contrib
+    end
+    
+    puts "@contribs is : " + @contribs.inspect
+    
+    total_contrib = @contribs.values.inject( 0.0 ) { |s, x| s += x }
+    puts "total_contrib is : " + total_contrib.inspect
+    
+    raise "STOP"
     # @cumulative_security_contributions = {}
     # security_days_by_company = Hash.new { |h, k| h[k] = [] }
     # contribution_days_by_company = Hash.new { |h, k| h[k] = [] }
@@ -94,7 +112,14 @@ class Attribution::Report
     dates = (@start_date..@end_date).select(&:trading_day?)
     portfolio_days = dates.map { |date| @portfolio.day( date ).portfolio_day }
     performances = portfolio_days.map(&:performance)
-    puts "performances is : " + performances.inspect
+    multipliers = performances.reverse.inject( [] ) do |set, mult|
+      set.size.times do |i|
+        set[i] = set[i]*mult
+      end
+      
+      set << mult
+    end
+    multipliers
   end
   
   def daily_security_contribution_addends
