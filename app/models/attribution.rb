@@ -11,10 +11,10 @@ module Attribution
     report = Attribution::Report.new :start_date => d0, :end_date => d1, :portfolio => portfolio
     
     puts "STARTING"
-    result = RubyProf.profile do
+    # result = RubyProf.profile do
       report.calculate
-      puts "report.cumulative_portfolio_performance is : " + report.cumulative_portfolio_performance.inspect
-    end
+      # puts "report.cumulative_portfolio_performance is : " + report.cumulative_portfolio_performance.inspect
+    # end
     
     printer = RubyProf::GraphHtmlPrinter.new( result )
     output_path = File.join Rails.root, "tmp", "profile_output.html"

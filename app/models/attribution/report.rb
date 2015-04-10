@@ -14,10 +14,11 @@ class Attribution::Report
     ensure_inputs_are_set!
     ensure_days_are_completely_downloaded
     ensure_security_days_are_completely_calculated
+    true
     calculate_cumulative_security_performances
     calculate_cumulative_portfolio_performance
     calculate_cumulative_security_contributions
-    @results = { :security => security_stats }
+    # @results = { :security => security_stats }
   end
   
   def ensure_inputs_are_set!
@@ -40,58 +41,122 @@ class Attribution::Report
   end
   
   def calculate_cumulative_security_performances
-    self.securities = Hash.new { |h, k| h[k] = [] }
+    # self.securities = Hash.new { |h, k| h[k] = [] }
+    securities_performances = Hash.new { |h, k| h[k] = [] }
     days.sort_by(&:date).each do |d|
       d.security_days.each do |sd|
-        securities[sd.company_id] << sd
+        securities_performances[sd.company_id] << sd.performance
       end
     end
-    
+    puts "securities_performances is : " + securities_performances.inspect
     @cumulative_security_performances = {}
-    securities.each do |company_id, security_days|
-      company = Attribution::Company.find( company_id )
-      puts "#{company.tag.ljust(10)} | #{security_days.inspect}"
-      cumulative_perf = geo_link security_days.map(&:performance)
-      
-      @companies[company][:performance] = cumulative_perf
-      @cumulative_security_performances[company.tag] = cumulative_perf
+    securities_performances.each do |company_id, performances|
+      @cumulative_security_performances[company_id] = geo_link performances
     end
-    @cumulative_security_performances
+    puts "@cumulative_security_performances is : " + @cumulative_security_performances.inspect
+
+    # @cumulative_security_performances = {}
+    # securities.each do |company_id, security_days|
+    #   company = Attribution::Company.find( company_id )
+    #   puts "#{company.tag.ljust(10)} | #{security_days.inspect}"
+    #   cumulative_perf = geo_link security_days.map(&:performance)
+    #
+    #   @companies[company][:performance] = cumulative_perf
+    #   @cumulative_security_performances[company.tag] = cumulative_perf
+    # end
+    # @cumulative_security_performances
   end
   
   def calculate_cumulative_security_contributions
-    @cumulative_security_contributions = {}
-    security_days_by_company = Hash.new { |h, k| h[k] = [] }
-    contribution_days_by_company = Hash.new { |h, k| h[k] = [] }
+    multipliers = cumulative_contribution_multipliers
+    raise "STOP"
+    addends = daily_security_contribution_addends
     
-    days.sort_by(&:date).each do |d|
-      d.security_days.each do |sd|
-        security_days_by_company[sd.company_id] << sd
+    # @cumulative_security_contributions = {}
+    # security_days_by_company = Hash.new { |h, k| h[k] = [] }
+    # contribution_days_by_company = Hash.new { |h, k| h[k] = [] }
+    #
+    # days.sort_by(&:date).each do |d|
+    #   d.security_days.each do |sd|
+    #     security_days_by_company[sd.company_id] << sd
+    #   end
+    # end
+    #
+    # security_days_by_company.each do |company_id, security_days|
+    #   company = Attribution::Company.find( company_id )
+    #   contrib = security_contribution( security_days )
+    #   @companies[company][:contribution] = contrib
+    #   @cumulative_security_contributions[company.tag] = contrib
+    # end
+  end
+  
+  def cumulative_contribution_multipliers
+    dates = (@start_date..@end_date).select(&:trading_day?)
+    portfolio_days = dates.map { |date| @portfolio.day( date ).portfolio_day }
+    performances = portfolio_days.map(&:performance)
+    puts "performances is : " + performances.inspect
+  end
+  
+  def daily_security_contribution_addends
+    securities_contributions = Hash.new { |h, k| h[k] = [] }
+    dates = (@start_date..@end_date).select(&:trading_day?)
+    days = dates.map { |date| @portfolio.day( date ) }
+    all_security_days = days.map { |day| day.security_days }.flatten
+    all_companies = all_security_days.map { |sd| sd.company }.uniq
+    
+    company_contributions = {}
+    
+    all_companies.map { |c| company_contributions[c.id] = [] }
+    
+    puts "all_companies is : " + all_companies.inspect
+    days.each do |day|
+      security_days = day.security_days
+      all_companies.each do |company|
+        sd = security_days.find { |sd| sd.company_id == company.id }
+        contribution_for_day = !!sd ? sd.contribution : 0
+        company_contributions[company.id] << contribution_for_day
       end
     end
     
-    security_days_by_company.each do |company_id, security_days|
-      company = Attribution::Company.find( company_id )
-      contrib = security_contribution( security_days )
-      @companies[company][:contribution] = contrib
-      @cumulative_security_contributions[company.tag] = contrib
-    end
+    puts "company_contributions is : " + company_contributions.inspect
+    company_contributions
+    # days.sort_by(&:date).each do |d|
+    #   d.security_days.each do |sd|
+    #     securities_contributions[sd.company_id] << sd.performance
+    #   end
+    # end
+    # puts "securities_performances is : " + securities_performances.inspect
+    # @cumulative_security_performances = {}
+    # securities_performances.each do |company_id, performances|
+    #   @cumulative_security_performances[company_id] = geo_link performances
+    # end
+    # puts "@cumulative_security_performances is : " + @cumulative_security_performances.inspect
+    
   end
   
   
   def calculate_cumulative_portfolio_performance
-    range = (@start_date..@end_date).select(&:trading_day?)
-    daily_performances = range.to_a.map do |d| 
-      puts "PORT PERF: #{d} | #{@portfolio.day( d ).portfolio_day}"
-      @portfolio.day( d ).portfolio_day.performance
+    dates = (@start_date..@end_date).select(&:trading_day?)
+    dates_performances = {}
+    dates.each do |date|
+      portfolio_day = @portfolio.day( date ).portfolio_day
+      dates_performances[date] = portfolio_day.performance
     end
-    @cumulative_portfolio_performance = geo_link daily_performances
+    
+    dates_performances.map do |date, performance|
+      puts "PORT PERF: #{date} | #{performance}"
+    end
+    @cumulative_portfolio_performance = geo_link dates_performances.values
   end
   
   def days
-    @portfolio.days.where( :date => @start_date..@end_date )
+    @days ||= @portfolio.days.where( :date => @start_date..@end_date )
   end
   
+  # def days
+  #   @portfolio.days.where( :date => [@start_date..@end_date] )
+  # end
+  #
   def ensure_days_are_completely_downloaded
     trading_days = (@start_date.prev_trading_day..@end_date).select(&:trading_day?)
     trading_days.each do |date|
@@ -144,10 +209,6 @@ class Attribution::Report
       hsh[day.date] = day.portfolio_day
       hsh
     end
-  end
-  
-  def days
-    @portfolio.days.where( :date => [@start_date..@end_date] )
   end
   
   def pv_multiplier( security_day )
